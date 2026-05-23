@@ -17,9 +17,6 @@
 
 <body>
 
-  <!-- ============================================
-       NAVBAR
-  ============================================ -->
   <nav class="navbar" id="navbar">
     <div class="container">
       <a href="index.html" class="navbar-logo">
@@ -54,7 +51,6 @@
     </div>
   </nav>
 
-  <!-- Mobile Nav -->
   <div class="navbar-mobile" id="mobileNav">
     <div class="lang-switcher" style="margin-bottom:16px;">
       <button class="lang-btn active" onclick="switchLang('en')">EN</button>
@@ -76,9 +72,6 @@
   </div>
 
 
-  <!-- ============================================
-       PAGE HERO
-  ============================================ -->
   <section class="page-hero">
     <div class="container">
       <div class="breadcrumb">
@@ -99,16 +92,11 @@
   </section>
 
 
-  <!-- ============================================
-       VACANCIES SECTION
-  ============================================ -->
   <section class="section-padding">
     <div class="container">
 
-      <!-- Filter Bar -->
       <div class="filter-bar" data-aos="fade-up">
 
-        <!-- Search -->
         <div class="filter-group filter-search" style="flex:2;">
           <label class="filter-label">Search</label>
           <div class="filter-search-wrap">
@@ -123,7 +111,6 @@
           </div>
         </div>
 
-        <!-- Country Filter -->
         <div class="filter-group">
           <label class="filter-label">Country</label>
           <select class="filter-select" id="countryFilter" title="Country filter" aria-label="Country" onchange="applyFilters()">
@@ -142,7 +129,6 @@
           </select>
         </div>
 
-        <!-- Category Filter -->
         <div class="filter-group">
           <label class="filter-label">Category</label>
           <select class="filter-select" id="categoryFilter" title="Category filter" aria-label="Category" onchange="applyFilters()">
@@ -156,21 +142,17 @@
           </select>
         </div>
 
-        <!-- Reset -->
         <button class="filter-reset" onclick="resetFilters()">
           <i class="fas fa-times"></i> Reset
         </button>
 
       </div>
 
-      <!-- Results count -->
       <div class="vacancies-count" id="vacanciesCount" data-aos="fade-up">
         Showing <span id="countNum">0</span> vacancies
       </div>
 
-      <!-- Vacancy List -->
       <div id="vacanciesList">
-        <!-- Loading skeletons -->
         <div class="vacancy-full-card" style="opacity:0.4;" id="skeleton1">
           <div style="font-size:2.5rem;">⏳</div>
           <div>
@@ -197,7 +179,6 @@
         </div>
       </div>
 
-      <!-- No Results -->
       <div class="no-results" id="noResults">
         <div class="no-results-icon">🔍</div>
         <div class="no-results-title">No vacancies found</div>
@@ -211,9 +192,6 @@
   </section>
 
 
-  <!-- ============================================
-       APPLY CTA
-  ============================================ -->
   <section class="section-padding bg-off-white">
     <div class="container">
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;" data-aos="fade-up">
@@ -246,9 +224,6 @@
   </section>
 
 
-  <!-- ============================================
-       FOOTER
-  ============================================ -->
   <footer class="footer">
     <div class="container">
       <div class="footer-grid">
@@ -320,19 +295,36 @@
     </div>
   </footer>
 
-  <!-- Scroll To Top -->
   <button type="button" class="scroll-top" id="scrollTop" onclick="scrollToTop()" title="Scroll to top">
     <i class="fas fa-chevron-up"></i>
   </button>
 
 
-  <!-- ============================================
-       SCRIPTS
-  ============================================ -->
   <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="js/supabase.js"></script>
+  
+  <script>
+    const SUPABASE_URL = 'https://wjhbqhrzwopnmizlumyg.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndqaGJxaHJ6d29wbm1pemx1bXlnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkxODQyMDksImV4cCI6MjA5NDc2MDIwOX0.nPWyaBwX3cnioOYcXkVNLR_31AUeDjevphrtH87srgk';
+    
+    const { createClient } = supabase;
+    const db = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    window.getVacancies = async function() {
+      const { data, error } = await db
+        .from('vacancies')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        console.error("Database Error:", error.message);
+        return [];
+      }
+      return data || [];
+    };
+  </script>
+
   <script src="js/lang.js"></script>
   <script src="js/main.js"></script>
 
