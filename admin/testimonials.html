@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Testimonials | Yakeen Admin</title>
+
+  <link rel="icon" type="image/png" href="../assets/logos/yakeen-logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="../css/style.css" />
+
+  <style>
+    /* ── Testimonials admin grid ── */
+    .admin-testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 24px;
+    }
+
+    .admin-t-card {
+      background: var(--white);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid rgba(0,0,0,0.06);
+      transition: var(--transition);
+    }
+
+    .admin-t-card:hover {
+      box-shadow: var(--shadow-md);
+      transform: translateY(-3px);
+      border-color: rgba(201,160,48,0.2);
+    }
+
+    /* Video thumbnail */
+    .admin-t-thumb {
+      position: relative;
+      aspect-ratio: 16/9;
+      background: var(--navy-dark);
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    .admin-t-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.8;
+      transition: var(--transition);
+    }
+
+    .admin-t-card:hover .admin-t-thumb img {
+      opacity: 0.6;
+      transform: scale(1.04);
+    }
+
+    .admin-t-play {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+    }
+
+    .admin-t-play-btn {
+      width: 52px;
+      height: 52px;
+      background: rgba(201,160,48,0.9);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      color: var(--navy-dark);
+      box-shadow: 0 0 0 10px rgba(201,160,48,0.2);
+    }
+
+    .admin-t-country-badge {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: rgba(26,26,46,0.85);
+      color: var(--white);
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 50px;
+      backdrop-filter: blur(4px);
+      border: 1px solid rgba(201,160,48,0.3);
+    }
+
+    /* Card body */
+    .admin-t-body {
+      padding: 18px;
+    }
+
+    .admin-t-name {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--navy-dark);
+      margin-bottom: 2px;
+    }
+
+    .admin-t-meta {
+      font-size: 0.78rem;
+      color: var(--mid-gray);
+      margin-bottom: 12px;
+    }
+
+    .admin-t-url {
+      font-size: 0.72rem;
+      color: var(--gold-dark);
+      background: rgba(201,160,48,0.08);
+      border: 1px solid rgba(201,160,48,0.2);
+      border-radius: var(--radius-sm);
+      padding: 6px 10px;
+      margin-bottom: 14px;
+      word-break: break-all;
+      line-height: 1.4;
+    }
+
+    /* URL input preview */
+    .yt-preview-wrap {
+      width: 100%;
+      aspect-ratio: 16/9;
+      background: var(--navy-dark);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid var(--light-gray);
+      transition: var(--transition);
+      position: relative;
+    }
+
+    .yt-preview-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: none;
+    }
+
+    .yt-preview-wrap.has-preview {
+      border-color: rgba(201,160,48,0.4);
+    }
+
+    .yt-preview-wrap.has-preview img {
+      display: block;
+    }
+
+    .yt-preview-wrap.has-preview .yt-placeholder {
+      display: none;
+    }
+
+    .yt-play-overlay {
+      position: absolute;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,0.3);
+    }
+
+    .yt-preview-wrap.has-preview .yt-play-overlay {
+      display: flex;
+    }
+
+    .yt-placeholder {
+      text-align: center;
+      color: rgba(255,255,255,0.4);
+      font-size: 0.82rem;
+    }
+
+    /* Video modal */
+    .video-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.92);
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .video-modal.open { display: flex; }
+
+    .video-modal-inner {
+      width: 100%;
+      max-width: 860px;
+      position: relative;
+    }
+
+    .video-modal-close {
+      position: absolute;
+      top: -48px;
+      right: 0;
+      background: rgba(255,255,255,0.1);
+      border: none;
+      color: var(--white);
+      font-size: 1.4rem;
+      cursor: pointer;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+    }
+
+    .video-modal-close:hover {
+      background: var(--gold);
+      color: var(--navy-dark);
+    }
+
+    .video-modal iframe {
+      width: 100%;
+      aspect-ratio: 16/9;
+      border-radius: var(--radius-md);
+      border: none;
+    }
+  </style>
+</head>
+
+<body class="admin-body">
+<div class="admin-layout">
+
+  <!-- ── SIDEBAR ── -->
+  <aside class="admin-sidebar">
+    <div class="admin-sidebar-logo">
+      <img src="../assets/logos/yakeen-logo.png" alt="Yakeen International" />
+    </div>
+    <div class="admin-sidebar-label">Main Menu</div>
+    <nav class="admin-nav">
+      <a href="dashboard.html"    class="admin-nav-item"><span class="admin-nav-icon">📊</span> Dashboard</a>
+      <a href="vacancies.html"    class="admin-nav-item"><span class="admin-nav-icon">💼</span> Vacancies</a>
+      <a href="visa.html"         class="admin-nav-item"><span class="admin-nav-icon">🛂</span> Visa Tracking</a>
+      <a href="gallery.html"      class="admin-nav-item"><span class="admin-nav-icon">🖼️</span> Gallery</a>
+      <a href="testimonials.html" class="admin-nav-item active"><span class="admin-nav-icon">🎥</span> Testimonials</a>
+    </nav>
+    <div class="admin-sidebar-label">Links</div>
+    <nav class="admin-nav">
+      <a href="../index.html"          target="_blank" class="admin-nav-item"><span class="admin-nav-icon">🌐</span> View Website</a>
+      <a href="../testimonials.html"   target="_blank" class="admin-nav-item"><span class="admin-nav-icon">👁️</span> View Testimonials</a>
+    </nav>
+    <div class="admin-logout">
+      <button onclick="handleLogout()" class="admin-nav-item" style="width:100%;background:rgba(239,68,68,0.1);color:#dc2626;border:none;cursor:pointer;">
+        <span class="admin-nav-icon">🚪</span> Log Out
+      </button>
+    </div>
+  </aside>
+
+  <!-- ── MAIN ── -->
+  <main class="admin-main">
+
+    <div class="admin-topbar">
+      <div class="admin-topbar-title">🎥 Testimonials Management</div>
+      <div class="admin-topbar-user">
+        <span id="adminEmail" style="color:var(--mid-gray);font-size:0.82rem;"></span>
+        <div class="admin-avatar" id="adminAvatar">—</div>
+      </div>
+    </div>
+
+    <div class="admin-content">
+
+      <!-- Info banner -->
+      <div style="background:rgba(201,160,48,0.06);border:1px solid rgba(201,160,48,0.2);border-radius:var(--radius-md);padding:16px 20px;margin-bottom:24px;display:flex;align-items:flex-start;gap:12px;">
+        <span style="font-size:1.2rem;flex-shrink:0;">💡</span>
+        <div style="font-size:0.85rem;color:var(--text-body);line-height:1.7;">
+          <strong style="color:var(--navy-dark);">How to add testimonials:</strong>
+          Upload the worker's video to
+          <a href="https://youtube.com" target="_blank" style="color:var(--gold);font-weight:600;">YouTube</a>
+          (can be unlisted for privacy), then paste the video link here.
+          The thumbnail and video will load automatically.
+        </div>
+      </div>
+
+      <!-- Top bar -->
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:12px;">
+        <div style="font-size:0.85rem;color:var(--mid-gray);">
+          <span id="testimonialCount" style="font-weight:700;color:var(--navy-dark);">0</span>
+          testimonial<span id="testimonialPlural">s</span> published
+        </div>
+        <button class="btn btn-primary" onclick="openAddModal()">
+          <i class="fas fa-plus"></i> Add Testimonial
+        </button>
+      </div>
+
+      <!-- Testimonials grid -->
+      <div class="admin-testimonials-grid" id="adminTestimonialsGrid">
+        <!-- Skeletons -->
+        <div style="background:var(--light-gray);border-radius:var(--radius-md);aspect-ratio:16/9;animation:shimmer 1.5s ease infinite;"></div>
+        <div style="background:var(--light-gray);border-radius:var(--radius-md);aspect-ratio:16/9;animation:shimmer 1.5s ease infinite 0.2s;"></div>
+        <div style="background:var(--light-gray);border-radius:var(--radius-md);aspect-ratio:16/9;animation:shimmer 1.5s ease infinite 0.4s;"></div>
+      </div>
+
+      <!-- Empty state -->
+      <div id="testimonialsEmpty" style="display:none;text-align:center;padding:80px 20px;">
+        <div style="font-size:3rem;margin-bottom:16px;">🎥</div>
+        <div style="font-size:1rem;font-weight:700;color:var(--navy-dark);margin-bottom:8px;">
+          No testimonials yet
+        </div>
+        <div style="font-size:0.85rem;color:var(--mid-gray);margin-bottom:20px;">
+          Add your first worker success story.
+        </div>
+        <button class="btn btn-primary" onclick="openAddModal()">
+          <i class="fas fa-plus"></i> Add First Testimonial
+        </button>
+      </div>
+
+    </div>
+  </main>
+
+</div>
+
+
+<!-- ============================================
+     ADD TESTIMONIAL MODAL
+============================================ -->
+<div class="admin-modal-overlay" id="addModal">
+  <div class="admin-modal" style="max-width:560px;">
+    <div class="admin-modal-title">Add Worker Testimonial</div>
+
+    <form id="addForm" onsubmit="saveTestimonial(event)">
+
+      <!-- YouTube URL -->
+      <div class="form-group">
+        <label class="form-label">YouTube Video URL *</label>
+        <input
+          type="url"
+          class="form-input"
+          id="tYoutubeUrl"
+          placeholder="https://www.youtube.com/watch?v=XXXXXXXXXXX"
+          oninput="previewYoutube()"
+          required
+        />
+        <div style="font-size:0.75rem;color:var(--mid-gray);margin-top:6px;">
+          Paste any YouTube link — regular, short (youtu.be), or unlisted
+        </div>
+      </div>
+
+      <!-- Video preview -->
+      <div class="yt-preview-wrap" id="ytPreviewWrap">
+        <div class="yt-placeholder">
+          <div style="font-size:2rem;margin-bottom:8px;">▶️</div>
+          <div>Video preview will appear here</div>
+        </div>
+        <img id="ytPreviewImg" src="" alt="YouTube Thumbnail" />
+        <div class="yt-play-overlay">
+          <div style="width:52px;height:52px;background:rgba(201,160,48,0.9);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.3rem;color:var(--navy-dark);">▶</div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Worker Full Name *</label>
+          <input
+            type="text"
+            class="form-input"
+            id="tName"
+            placeholder="e.g. Mohammad Karim"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Destination Country *</label>
+          <select class="form-select" id="tCountry" required>
+            <option value="">Select country</option>
+            <option>Saudi Arabia</option>
+            <option>UAE</option>
+            <option>Japan</option>
+            <option>Vietnam</option>
+            <option>Maldives</option>
+            <option>Malaysia</option>
+            <option>Portugal</option>
+            <option>Spain</option>
+            <option>Norway</option>
+            <option>Malta</option>
+            <option>Italy</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Job Title *</label>
+        <input
+          type="text"
+          class="form-input"
+          id="tJobTitle"
+          placeholder="e.g. Mason, Electrician, Factory Worker"
+          required
+        />
+      </div>
+
+      <div style="display:flex;gap:12px;justify-content:flex-end;margin-top:8px;">
+        <button type="button" class="btn btn-outline" onclick="closeAddModal()" style="padding:12px 24px;">
+          Cancel
+        </button>
+        <button type="submit" class="btn btn-primary" id="addSaveBtn" style="padding:12px 28px;">
+          <i class="fas fa-save"></i> Publish Testimonial
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>
+
+
+<!-- ============================================
+     DELETE CONFIRM MODAL
+============================================ -->
+<div class="admin-modal-overlay" id="deleteModal">
+  <div class="admin-modal" style="max-width:420px;text-align:center;">
+    <div style="font-size:3rem;margin-bottom:12px;">🗑️</div>
+    <div style="font-size:1.1rem;font-weight:800;color:var(--navy-dark);margin-bottom:8px;">
+      Remove Testimonial?
+    </div>
+    <div style="font-size:0.88rem;color:var(--text-body);margin-bottom:24px;line-height:1.7;">
+      This testimonial will be removed from the public website.
+      The YouTube video itself will not be deleted.
+    </div>
+    <div style="display:flex;gap:12px;justify-content:center;">
+      <button class="btn btn-outline" onclick="closeDeleteModal()" style="padding:12px 24px;">
+        Cancel
+      </button>
+      <button
+        class="btn"
+        style="background:#dc2626;color:white;padding:12px 24px;"
+        onclick="confirmDelete()"
+        id="deleteConfirmBtn"
+      >
+        <i class="fas fa-trash"></i> Yes, Remove
+      </button>
+    </div>
+  </div>
+</div>
+
+
+<!-- Video preview modal -->
+<div class="video-modal" id="videoModal">
+  <div class="video-modal-inner">
+    <button class="video-modal-close" onclick="closeVideoModal()">
+      <i class="fas fa-times"></i>
+    </button>
+    <iframe id="videoModalFrame" src="" allowfullscreen></iframe>
+  </div>
+</div>
+
+
+<!-- Toast -->
+<div id="toast" style="display:none;position:fixed;top:24px;right:24px;z-index:9999;background:var(--navy-dark);color:var(--white);padding:14px 24px;border-radius:var(--radius-md);box-shadow:var(--shadow-lg);font-size:0.88rem;font-weight:600;">
+  <span id="toastMsg"></span>
+</div>
+
+
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../js/supabase.js"></script>
+
+<script>
+  const countryFlags = {
+    'Saudi Arabia':'🇸🇦','UAE':'🇦🇪','Japan':'🇯🇵',
+    'Vietnam':'🇻🇳','Maldives':'🇲🇻','Malaysia':'🇲🇾',
+    'Portugal':'🇵🇹','Spain':'🇪🇸','Norway':'🇳🇴',
+    'Malta':'🇲🇹','Italy':'🇮🇹'
+  };
+
+  let allTestimonials = [];
+  let deleteTargetId  = null;
+
+  // ── Auth + init ──
+  (async function init() {
+    const ok = await window.requireAuth();
+    if (!ok) return;
+
+    const session = await window.getSession();
+    const email   = session.user.email;
+    document.getElementById('adminEmail').textContent  = email;
+    document.getElementById('adminAvatar').textContent = email[0].toUpperCase();
+
+    loadTestimonials();
+  })();
+
+  // ── Load testimonials ──
+  async function loadTestimonials() {
+    const grid = document.getElementById('adminTestimonialsGrid');
+    try {
+      allTestimonials = await window.getTestimonials();
+
+      const count = allTestimonials.length;
+      document.getElementById('testimonialCount').textContent  = count;
+      document.getElementById('testimonialPlural').textContent = count !== 1 ? 's' : '';
+
+      // Clear skeletons
+      grid.innerHTML = '';
+
+      if (count === 0) {
+        document.getElementById('testimonialsEmpty').style.display = 'block';
+        return;
+      }
+
+      document.getElementById('testimonialsEmpty').style.display = 'none';
+
+      grid.innerHTML = allTestimonials.map(t => {
+        const thumbUrl = getYouTubeThumbnail(t.youtube_url);
+        const embedUrl = getYouTubeEmbed(t.youtube_url);
+        const flag     = countryFlags[t.country] || '🌍';
+        const initials = t.worker_name
+          ? t.worker_name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0,2)
+          : '?';
+
+        return `
+          <div class="admin-t-card">
+
+            <!-- Thumbnail -->
+            <div class="admin-t-thumb" onclick="openVideoModal('${embedUrl}')">
+              <img
+                src="${thumbUrl}"
+                alt="${escHtml(t.worker_name)}"
+                loading="lazy"
+                onerror="this.style.background='var(--navy-dark)';this.style.display='block'"
+              />
+              <div class="admin-t-play">
+                <div class="admin-t-play-btn">▶</div>
+              </div>
+              <div class="admin-t-country-badge">
+                ${flag} ${escHtml(t.country)}
+              </div>
+            </div>
+
+            <!-- Body -->
+            <div class="admin-t-body">
+              <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+                <div style="width:36px;height:36px;background:linear-gradient(135deg,var(--navy),var(--navy-light));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.78rem;font-weight:700;color:var(--gold-light);flex-shrink:0;">
+                  ${initials}
+                </div>
+                <div>
+                  <div class="admin-t-name">${escHtml(t.worker_name)}</div>
+                  <div class="admin-t-meta">${escHtml(t.job_title)} · ${escHtml(t.country)}</div>
+                </div>
+              </div>
+
+              <div class="admin-t-url">
+                🔗 ${escHtml(t.youtube_url)}
+              </div>
+
+              <div style="font-size:0.72rem;color:var(--mid-gray);margin-bottom:12px;">
+                Added: ${new Date(t.created_at).toLocaleDateString('en-GB')}
+              </div>
+
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+                <button
+                  class="admin-btn-edit"
+                  onclick="openVideoModal('${embedUrl}')"
+                  style="justify-content:center;"
+                >
+                  <i class="fas fa-play"></i> Preview
+                </button>
+                <button
+                  class="admin-btn-delete"
+                  onclick="openDeleteModal(${t.id})"
+                  style="justify-content:center;"
+                >
+                  <i class="fas fa-trash"></i> Remove
+                </button>
+              </div>
+            </div>
+
+          </div>`;
+      }).join('');
+
+    } catch (err) {
+      grid.innerHTML = `
+        <div style="grid-column:1/-1;text-align:center;padding:40px;color:#dc2626;">
+          Failed to load testimonials. Please refresh.
+        </div>`;
+    }
+  }
+
+  // ── YouTube helpers ──
+  function getYouTubeId(url) {
+    if (!url) return '';
+    const match = url.match(
+      /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/
+    );
+    return match ? match[1] : '';
+  }
+
+  function getYouTubeEmbed(url) {
+    const id = getYouTubeId(url);
+    return id ? `https://www.youtube.com/embed/${id}` : '';
+  }
+
+  function getYouTubeThumbnail(url) {
+    const id = getYouTubeId(url);
+    return id ? `https://img.youtube.com/vi/${id}/hqdefault.jpg` : '';
+  }
+
+  // ── YouTube URL preview in modal ──
+  function previewYoutube() {
+    const url  = document.getElementById('tYoutubeUrl').value.trim();
+    const wrap = document.getElementById('ytPreviewWrap');
+    const img  = document.getElementById('ytPreviewImg');
+    const thumb = getYouTubeThumbnail(url);
+
+    if (thumb) {
+      img.src     = thumb;
+      img.onload  = () => wrap.classList.add('has-preview');
+      img.onerror = () => wrap.classList.remove('has-preview');
+    } else {
+      wrap.classList.remove('has-preview');
+      img.src = '';
+    }
+  }
+
+  // ── Save testimonial ──
+  async function saveTestimonial(e) {
+    e.preventDefault();
+
+    const btn = document.getElementById('addSaveBtn');
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Publishing...';
+    btn.disabled  = true;
+
+    const url = document.getElementById('tYoutubeUrl').value.trim();
+
+    if (!getYouTubeId(url)) {
+      showToast('❌ Please enter a valid YouTube URL', true);
+      btn.innerHTML = '<i class="fas fa-save"></i> Publish Testimonial';
+      btn.disabled  = false;
+      return;
+    }
+
+    const payload = {
+      worker_name:  document.getElementById('tName').value.trim(),
+      country:      document.getElementById('tCountry').value,
+      job_title:    document.getElementById('tJobTitle').value.trim(),
+      youtube_url:  url,
+    };
+
+    try {
+      await window.addTestimonial(payload);
+      showToast('✅ Testimonial published successfully!');
+      closeAddModal();
+      loadTestimonials();
+    } catch (err) {
+      showToast('❌ Error: ' + err.message, true);
+    } finally {
+      btn.innerHTML = '<i class="fas fa-save"></i> Publish Testimonial';
+      btn.disabled  = false;
+    }
+  }
+
+  // ── Modal open/close ──
+  function openAddModal() {
+    document.getElementById('addForm').reset();
+    document.getElementById('ytPreviewWrap').classList.remove('has-preview');
+    document.getElementById('ytPreviewImg').src = '';
+    document.getElementById('addModal').classList.add('open');
+  }
+
+  function closeAddModal() {
+    document.getElementById('addModal').classList.remove('open');
+  }
+
+  function openDeleteModal(id) {
+    deleteTargetId = id;
+    document.getElementById('deleteModal').classList.add('open');
+  }
+
+  function closeDeleteModal() {
+    deleteTargetId = null;
+    document.getElementById('deleteModal').classList.remove('open');
+  }
+
+  async function confirmDelete() {
+    if (!deleteTargetId) return;
+
+    const btn = document.getElementById('deleteConfirmBtn');
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Removing...';
+    btn.disabled  = true;
+
+    try {
+      await window.deleteTestimonial(deleteTargetId);
+      showToast('🗑️ Testimonial removed.');
+      closeDeleteModal();
+      loadTestimonials();
+    } catch (err) {
+      showToast('❌ Delete failed: ' + err.message, true);
+    } finally {
+      btn.innerHTML = '<i class="fas fa-trash"></i> Yes, Remove';
+      btn.disabled  = false;
+    }
+  }
+
+  // ── Video preview modal ──
+  function openVideoModal(embedUrl) {
+    if (!embedUrl) return;
+    document.getElementById('videoModalFrame').src = embedUrl + '?autoplay=1&rel=0';
+    document.getElementById('videoModal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeVideoModal() {
+    document.getElementById('videoModal').classList.remove('open');
+    document.getElementById('videoModalFrame').src = '';
+    document.body.style.overflow = '';
+  }
+
+  // ── Close modals on backdrop ──
+  ['addModal','deleteModal','videoModal'].forEach(id => {
+    document.getElementById(id).addEventListener('click', function(e) {
+      if (e.target === this) {
+        closeAddModal();
+        closeDeleteModal();
+        closeVideoModal();
+      }
+    });
+  });
+
+  // ── Toast ──
+  function showToast(msg, isError = false) {
+    const toast = document.getElementById('toast');
+    document.getElementById('toastMsg').textContent = msg;
+    toast.style.background = isError ? '#dc2626' : 'var(--navy-dark)';
+    toast.style.display = 'block';
+    setTimeout(() => { toast.style.display = 'none'; }, 3500);
+  }
+
+  // ── Helpers ──
+  function escHtml(str) {
+    if (!str) return '';
+    return str
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+      .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  // ── Logout ──
+  async function handleLogout() {
+    if (!confirm('Are you sure you want to log out?')) return;
+    await window.adminLogout();
+    window.location.href = 'login.html';
+  }
+
+  // ── Escape key ──
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      closeAddModal();
+      closeDeleteModal();
+      closeVideoModal();
+    }
+  });
+
+  // ── Shimmer ──
+  const s = document.createElement('style');
+  s.textContent = `
+    @keyframes shimmer {
+      0%, 100% { opacity: 0.5; }
+      50%       { opacity: 1; }
+    }`;
+  document.head.appendChild(s);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Login | Yakeen International</title>
+
+  <link rel="icon" type="image/png" href="../assets/logos/yakeen-logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="../css/style.css" />
+
+  <style>
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, var(--navy-dark) 0%, #1a1a3e 60%, #0d0d2b 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: absolute;
+      top: -100px; right: -100px;
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(201,160,48,0.08) 0%, transparent 70%);
+    }
+
+    body::after {
+      content: '';
+      position: absolute;
+      bottom: -80px; left: -80px;
+      width: 300px; height: 300px;
+      background: radial-gradient(circle, rgba(201,160,48,0.05) 0%, transparent 70%);
+    }
+
+    .login-card {
+      background: var(--white);
+      border-radius: var(--radius-xl);
+      padding: 52px 48px;
+      width: 100%;
+      max-width: 440px;
+      box-shadow: 0 32px 80px rgba(0,0,0,0.3);
+      position: relative;
+      z-index: 1;
+      animation: slideUp 0.6s ease forwards;
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .login-logo {
+      display: block;
+      height: 72px;
+      width: auto;
+      margin: 0 auto 28px;
+    }
+
+    .login-title {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--navy-dark);
+      text-align: center;
+      margin-bottom: 6px;
+    }
+
+    .login-subtitle {
+      font-size: 0.85rem;
+      color: var(--mid-gray);
+      text-align: center;
+      margin-bottom: 36px;
+    }
+
+    .login-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(201,160,48,0.1);
+      border: 1px solid rgba(201,160,48,0.3);
+      color: var(--gold-dark);
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 5px 14px;
+      border-radius: 50px;
+      margin: 0 auto 28px;
+      display: flex;
+      justify-content: center;
+      width: fit-content;
+    }
+
+    .input-wrap {
+      position: relative;
+      margin-bottom: 16px;
+    }
+
+    .input-icon {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--mid-gray);
+      font-size: 0.95rem;
+      z-index: 1;
+    }
+
+    .login-input {
+      width: 100%;
+      padding: 14px 16px 14px 44px;
+      border: 2px solid var(--light-gray);
+      border-radius: var(--radius-sm);
+      font-size: 0.95rem;
+      font-family: 'Poppins', sans-serif;
+      color: var(--text-dark);
+      outline: none;
+      transition: var(--transition);
+      background: var(--off-white);
+    }
+
+    .login-input:focus {
+      border-color: var(--gold);
+      background: var(--white);
+      box-shadow: 0 0 0 4px rgba(201,160,48,0.1);
+    }
+
+    .password-toggle {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: var(--mid-gray);
+      cursor: pointer;
+      font-size: 0.9rem;
+      padding: 4px;
+      transition: var(--transition);
+    }
+
+    .password-toggle:hover { color: var(--navy-dark); }
+
+    .login-btn {
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(135deg, var(--navy-dark), var(--navy));
+      color: var(--white);
+      border: none;
+      border-radius: var(--radius-sm);
+      font-size: 1rem;
+      font-weight: 700;
+      font-family: 'Poppins', sans-serif;
+      cursor: pointer;
+      transition: var(--transition);
+      margin-top: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .login-btn:hover {
+      background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+      color: var(--navy-dark);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-gold);
+    }
+
+    .login-error {
+      display: none;
+      background: rgba(239,68,68,0.08);
+      border: 1px solid rgba(239,68,68,0.25);
+      border-radius: var(--radius-sm);
+      padding: 12px 16px;
+      font-size: 0.85rem;
+      color: #dc2626;
+      margin-bottom: 16px;
+      text-align: center;
+      animation: fadeSlideUp 0.3s ease forwards;
+    }
+
+    .login-error.visible { display: block; }
+
+    @keyframes fadeSlideUp {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .login-footer {
+      margin-top: 28px;
+      padding-top: 20px;
+      border-top: 1px solid var(--light-gray);
+      text-align: center;
+      font-size: 0.78rem;
+      color: var(--mid-gray);
+    }
+
+    .login-footer a {
+      color: var(--gold-dark);
+      font-weight: 600;
+    }
+
+    /* Particles */
+    .particle {
+      position: absolute;
+      border-radius: 50%;
+      background: var(--gold);
+      opacity: 0.1;
+      animation: float-particle linear infinite;
+    }
+
+    @keyframes float-particle {
+      0%   { transform: translateY(100vh); opacity: 0; }
+      10%  { opacity: 0.1; }
+      90%  { opacity: 0.1; }
+      100% { transform: translateY(-100px); opacity: 0; }
+    }
+  </style>
+</head>
+
+<body id="loginBody">
+
+  <div class="login-card">
+
+    <img src="../assets/logos/yakeen-logo.png" alt="Yakeen International" class="login-logo" />
+
+    <h1 class="login-title">Admin Portal</h1>
+    <p class="login-subtitle">Yakeen International — Staff Access Only</p>
+
+    <div class="login-badge">
+      🔐 Secure Admin Area
+    </div>
+
+    <!-- Error message -->
+    <div class="login-error" id="loginError">
+      <i class="fas fa-exclamation-circle"></i>
+      <span id="loginErrorMsg">Invalid email or password. Please try again.</span>
+    </div>
+
+    <!-- Login form -->
+    <form id="loginForm" onsubmit="handleLogin(event)">
+
+      <div class="input-wrap">
+        <i class="fas fa-envelope input-icon"></i>
+        <input
+          type="email"
+          id="loginEmail"
+          class="login-input"
+          placeholder="Admin email address"
+          required
+          autocomplete="email"
+        />
+      </div>
+
+      <div class="input-wrap">
+        <i class="fas fa-lock input-icon"></i>
+        <input
+          type="password"
+          id="loginPassword"
+          class="login-input"
+          placeholder="Password"
+          required
+          autocomplete="current-password"
+        />
+        <button
+          type="button"
+          class="password-toggle"
+          onclick="togglePassword()"
+          id="pwToggle"
+        >
+          <i class="fas fa-eye" id="pwToggleIcon"></i>
+        </button>
+      </div>
+
+      <button type="submit" class="login-btn" id="loginBtn">
+        <i class="fas fa-sign-in-alt"></i>
+        Sign In to Admin Panel
+      </button>
+
+    </form>
+
+    <div class="login-footer">
+      <a href="../index.html">← Back to main website</a>
+      <br/><br/>
+      Problems logging in? Contact your system administrator.
+    </div>
+
+  </div>
+
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/supabase.js"></script>
+
+  <script>
+    // ── Generate particles ──
+    (function() {
+      const body = document.getElementById('loginBody');
+      for (let i = 0; i < 12; i++) {
+        const p = document.createElement('div');
+        p.classList.add('particle');
+        const size = Math.random() * 5 + 2;
+        p.style.cssText = `
+          width:${size}px; height:${size}px;
+          left:${Math.random() * 100}%;
+          animation-duration:${Math.random() * 15 + 8}s;
+          animation-delay:${Math.random() * 8}s;
+        `;
+        body.appendChild(p);
+      }
+    })();
+
+    // ── Check if already logged in ──
+    (async function checkSession() {
+      const session = await window.getSession();
+      if (session) {
+        window.location.href = 'dashboard.html';
+      }
+    })();
+
+    // ── Handle login ──
+    async function handleLogin(e) {
+      e.preventDefault();
+
+      const email    = document.getElementById('loginEmail').value.trim();
+      const password = document.getElementById('loginPassword').value;
+      const btn      = document.getElementById('loginBtn');
+      const errorDiv = document.getElementById('loginError');
+      const errorMsg = document.getElementById('loginErrorMsg');
+
+      errorDiv.classList.remove('visible');
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing in...';
+      btn.disabled  = true;
+
+      try {
+        await window.adminLogin(email, password);
+        // Redirect to dashboard on success
+        btn.innerHTML = '<i class="fas fa-check"></i> Success! Redirecting...';
+        setTimeout(() => {
+          window.location.href = 'dashboard.html';
+        }, 800);
+
+      } catch (err) {
+        btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Sign In to Admin Panel';
+        btn.disabled  = false;
+
+        if (err.message.includes('Invalid login')) {
+          errorMsg.textContent = 'Invalid email or password. Please try again.';
+        } else if (err.message.includes('Email not confirmed')) {
+          errorMsg.textContent = 'Please confirm your email address first.';
+        } else {
+          errorMsg.textContent = 'Login failed. Please check your connection.';
+        }
+
+        errorDiv.classList.add('visible');
+        document.getElementById('loginPassword').value = '';
+        document.getElementById('loginPassword').focus();
+      }
+    }
+
+    // ── Toggle password visibility ──
+    function togglePassword() {
+      const input = document.getElementById('loginPassword');
+      const icon  = document.getElementById('pwToggleIcon');
+      if (input.type === 'password') {
+        input.type    = 'text';
+        icon.className = 'fas fa-eye-slash';
+      } else {
+        input.type    = 'password';
+        icon.className = 'fas fa-eye';
+      }
+    }
+
+    // Allow Enter key
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Enter') {
+        document.getElementById('loginForm').requestSubmit();
+      }
+    });
+  </script>
+
+</body>
+</html>

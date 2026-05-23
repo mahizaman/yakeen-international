@@ -1,0 +1,1144 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Frequently Asked Questions — Everything you need to know about working abroad with Yakeen International." />
+  <title>FAQ | Yakeen International</title>
+
+  <link rel="icon" type="image/png" href="assets/logos/yakeen-logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
+
+  <style>
+    /* ── FAQ page specific ── */
+
+    .faq-categories {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 48px;
+    }
+
+    .faq-cat-btn {
+      padding: 9px 22px;
+      border-radius: 50px;
+      border: 2px solid var(--light-gray);
+      background: var(--white);
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-body);
+      cursor: pointer;
+      font-family: 'Poppins', sans-serif;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .faq-cat-btn:hover,
+    .faq-cat-btn.active {
+      background: linear-gradient(135deg, var(--gold), var(--gold-light));
+      border-color: var(--gold);
+      color: var(--navy-dark);
+      box-shadow: var(--shadow-gold);
+    }
+
+    .faq-group {
+      margin-bottom: 48px;
+    }
+
+    .faq-group-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--navy-dark);
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid var(--light-gray);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .faq-group-title span {
+      color: var(--gold);
+    }
+
+    /* Search bar */
+    .faq-search-wrap {
+      max-width: 560px;
+      margin: 0 auto 40px;
+      position: relative;
+    }
+
+    .faq-search-icon {
+      position: absolute;
+      left: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--mid-gray);
+      font-size: 1rem;
+    }
+
+    .faq-search-input {
+      width: 100%;
+      padding: 15px 20px 15px 48px;
+      border: 2px solid var(--light-gray);
+      border-radius: 50px;
+      font-size: 0.95rem;
+      font-family: 'Poppins', sans-serif;
+      color: var(--text-dark);
+      outline: none;
+      transition: var(--transition);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .faq-search-input:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 4px rgba(201,160,48,0.1);
+    }
+
+    /* No results */
+    .faq-no-results {
+      display: none;
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--mid-gray);
+    }
+
+    .faq-no-results.visible { display: block; }
+
+    /* Highlight match */
+    .faq-highlight {
+      background: rgba(201,160,48,0.2);
+      color: var(--navy-dark);
+      border-radius: 3px;
+      padding: 0 2px;
+    }
+
+    /* Info box */
+    .info-box {
+      background: rgba(201,160,48,0.06);
+      border: 1px solid rgba(201,160,48,0.2);
+      border-radius: var(--radius-md);
+      padding: 20px 24px;
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      margin-bottom: 12px;
+    }
+
+    .info-box-icon {
+      font-size: 1.3rem;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .info-box-text {
+      font-size: 0.88rem;
+      color: var(--text-body);
+      line-height: 1.7;
+    }
+
+    .info-box-text strong {
+      color: var(--navy-dark);
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ============================================
+       NAVBAR
+  ============================================ -->
+  <nav class="navbar" id="navbar">
+    <div class="container">
+      <a href="index.html" class="navbar-logo">
+        <img src="assets/logos/yakeen-logo.png" alt="Yakeen International" />
+      </a>
+      <ul class="navbar-menu">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About Us</a></li>
+        <li><a href="services.html">Services</a></li>
+        <li><a href="vacancies.html">Vacancies</a></li>
+        <li><a href="visa-tracker.html">Visa Tracker</a></li>
+        <li><a href="gallery.html">Gallery</a></li>
+        <li><a href="testimonials.html">Testimonials</a></li>
+        <li><a href="employer.html">Employers</a></li>
+        <li><a href="faq.html" class="active">FAQ</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+      <div class="navbar-actions">
+        <div class="lang-switcher">
+          <button class="lang-btn active" onclick="switchLang('en')">EN</button>
+          <button class="lang-btn" onclick="switchLang('bn')">বাং</button>
+          <button class="lang-btn" onclick="switchLang('hi')">हिं</button>
+          <button class="lang-btn" onclick="switchLang('ar')">عر</button>
+        </div>
+        <a href="contact.html" class="btn btn-primary" style="padding:10px 22px;font-size:0.85rem;">
+          <i class="fas fa-paper-plane"></i> Get In Touch
+        </a>
+        <div class="hamburger" id="hamburger" onclick="toggleMobileNav()">
+          <span></span><span></span><span></span>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Mobile Nav -->
+  <div class="navbar-mobile" id="mobileNav">
+    <div class="lang-switcher" style="margin-bottom:16px;">
+      <button class="lang-btn active" onclick="switchLang('en')">EN</button>
+      <button class="lang-btn" onclick="switchLang('bn')">বাং</button>
+      <button class="lang-btn" onclick="switchLang('hi')">हिं</button>
+      <button class="lang-btn" onclick="switchLang('ar')">عر</button>
+    </div>
+    <a href="index.html"        onclick="toggleMobileNav()">Home</a>
+    <a href="about.html"        onclick="toggleMobileNav()">About Us</a>
+    <a href="services.html"     onclick="toggleMobileNav()">Services</a>
+    <a href="vacancies.html"    onclick="toggleMobileNav()">Vacancies</a>
+    <a href="visa-tracker.html" onclick="toggleMobileNav()">Visa Tracker</a>
+    <a href="gallery.html"      onclick="toggleMobileNav()">Gallery</a>
+    <a href="testimonials.html" onclick="toggleMobileNav()">Testimonials</a>
+    <a href="employer.html"     onclick="toggleMobileNav()">Employers</a>
+    <a href="faq.html"          onclick="toggleMobileNav()">FAQ</a>
+    <a href="contact.html"      onclick="toggleMobileNav()">Contact</a>
+    <a href="contact.html" class="btn btn-primary" onclick="toggleMobileNav()">Get In Touch</a>
+  </div>
+
+
+  <!-- ============================================
+       PAGE HERO
+  ============================================ -->
+  <section class="page-hero">
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="index.html">Home</a>
+        <span class="breadcrumb-sep">›</span>
+        <span>FAQ</span>
+      </div>
+      <span class="section-tag" style="background:rgba(201,160,48,0.2);color:var(--gold-light);">Got Questions?</span>
+      <h1 class="section-title" style="color:var(--white);margin-top:12px;">
+        Frequently Asked <span>Questions</span>
+      </h1>
+      <div class="gold-divider center"></div>
+      <p class="section-subtitle" style="color:rgba(255,255,255,0.7);margin:0 auto;max-width:580px;">
+        Everything you need to know about working abroad, visa processes,
+        service fees, and how we protect you from fraud.
+      </p>
+    </div>
+  </section>
+
+
+  <!-- ============================================
+       FAQ SECTION
+  ============================================ -->
+  <section class="section-padding">
+    <div class="container" style="max-width:860px;">
+
+      <!-- Search -->
+      <div class="faq-search-wrap" data-aos="fade-up">
+        <i class="fas fa-search faq-search-icon"></i>
+        <input
+          type="text"
+          class="faq-search-input"
+          id="faqSearch"
+          placeholder="Search questions... e.g. 'visa fee' or 'Saudi Arabia'"
+          oninput="searchFAQ()"
+        />
+      </div>
+
+      <!-- Category filters -->
+      <div class="faq-categories" data-aos="fade-up" data-aos-delay="50">
+        <button class="faq-cat-btn active" onclick="filterCategory('all', this)">
+          🔍 All Questions
+        </button>
+        <button class="faq-cat-btn" onclick="filterCategory('general', this)">
+          💬 General
+        </button>
+        <button class="faq-cat-btn" onclick="filterCategory('process', this)">
+          📋 Process
+        </button>
+        <button class="faq-cat-btn" onclick="filterCategory('fees', this)">
+          💰 Fees & Costs
+        </button>
+        <button class="faq-cat-btn" onclick="filterCategory('visa', this)">
+          🛂 Visa & Documents
+        </button>
+        <button class="faq-cat-btn" onclick="filterCategory('scam', this)">
+          🛡️ Avoiding Scams
+        </button>
+        <button class="faq-cat-btn" onclick="filterCategory('employer', this)">
+          🏢 For Employers
+        </button>
+      </div>
+
+      <!-- No results -->
+      <div class="faq-no-results" id="faqNoResults">
+        <div style="font-size:2.5rem;margin-bottom:12px;">🤔</div>
+        <div style="font-size:1rem;font-weight:700;color:var(--navy-dark);margin-bottom:8px;">
+          No matching questions found
+        </div>
+        <div style="font-size:0.88rem;">
+          Try a different search term or
+          <a href="contact.html" style="color:var(--gold);font-weight:600;">contact us directly</a>.
+        </div>
+      </div>
+
+      <!-- ── CATEGORY: GENERAL ── -->
+      <div class="faq-group" id="group-general" data-aos="fade-up">
+        <div class="faq-group-title">
+          <span>💬</span> General Questions
+        </div>
+
+        <div class="faq-item" data-category="general">
+          <div class="faq-question" onclick="toggleFAQ(this)">
+            <span class="faq-question-text">What is Yakeen International?</span>
+            <div class="faq-icon">+</div>
+          </div>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              Yakeen International is a licensed overseas manpower recruitment agency
+              based in Bangladesh. We connect skilled, semi-skilled, and general workers
+              with verified international employers across the Middle East, Asia Pacific,
+              and Europe. We are a sister concern of Pigeon Overseas (RL-0377) and are
+              certified by BMET and BAIRA.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item" data-category="general">
+          <div class="faq-question" onclick="toggleFAQ(this)">
+            <span class="faq-question-text">Is Yakeen International a licensed agency?</span>
+            <div class="faq-icon">+</div>
+          </div>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              Yes. We are a fully licensed recruitment agency operating under the
+              Bangladesh Government's Bureau of Manpower, Employment and Training (BMET)
+              framework. We are also a member of the Bangladesh Association of
+              International Recruiting Agencies (BAIRA). You can verify our credentials
+              through these government bodies.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item" data-category="general">
+          <div class="faq-question" onclick="toggleFAQ(this)">
+            <span class="faq-question-text">Which countries do you send workers to?</span>
+            <div class="faq-icon">+</div>
+          </div>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              We currently deploy workers to 11 countries across three regions:
+              <br/><br/>
+              <strong>Middle East:</strong> Saudi Arabia (KSA), UAE<br/>
+              <strong>Asia Pacific:</strong> Japan, Vietnam, Maldives, Malaysia<br/>
+              <strong>Europe:</strong> Portugal, Spain, Norway, Malta, Italy<br/>
+              <br/>
+              We are continuously expanding our partnerships to new markets.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item" data-category="general">
+          <div class="faq-question" onclick="toggleFAQ(this)">
+            <span class="faq-question-text">What types of workers do you recruit?</span>
+            <div class="faq-icon">+</div>
+          </div>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              We recruit across 6 major sectors:
+              <ul style="margin:12px 0 0 16px;display:flex;flex-direction:column;gap:6px;">
+                <li>🏗️ Construction & Infrastructure (Mason, Carpenter, Steel Fixer, etc.)</li>
+                <li>⚡ MEP — Mechanical, Electrical & Plumbing</li>
+                <li>🏭 Industrial, Manufacturing & Marine</li>
+                <li>🏨 Hospitality & Facility Management</li>
+                <li>🚛 Transportation & Heavy Equipment</li>
+                <li>🌾 Agriculture & Landscaping</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+
+      <!-- ── CATEGORY: PROCESS ── -->
+      <div class="faq-group" id="group-process" data-aos="fade-up">
+        <div class="faq-group-title">
+          <span>📋</span> The Application Process
+        </div>
+
+        <div class="faq-item" data-category="process">
+          <div class="faq-question" onclick="toggleFAQ(this)">
+            <span class="faq-question-text">How do I apply for a job abroad through Yakeen International?</span>
+            <div class="faq-icon">+</div>
+          </div>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              It's simple:
+              <ol style="margin:12px 0 0 16px;display:flex;flex-direction:column;gap:8px;">
+                <li><strong>Browse vacancies</strong> on our website or visit our office.</li>
+                <li><strong>Register your interest</strong> via our contact form or in person.</li>
+                <li><strong>Submit your documents</strong> — NID, Passport, any trade certificates.</li>
+                <li><strong>Attend a trade test</strong> to verify your skills.</li>
+                <li><strong>Medical check-up</strong> at an approved center.</li>
+                <li><strong>Visa processing & BMET clearance</strong> — we handle this for you.</li>
+                <li><strong>Pre-departure orientation</strong> and then you're off!</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item" data-category="process">
+          <div class="faq-question" onclick="toggleFAQ(this)">
+            <span class="faq-question-text">How long does the entire process take?</span>
+            <div class="faq-icon">+</div>
+          </div>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              The timeline varies by destination country and visa type, but generally:
+              <br/><br/>
+              <strong>Middle East (KSA, UAE):</strong> 4–8 weeks<br/>
+              <strong>Asia Pacific (Japan, Malaysia):</strong> 8–16 weeks<br/>
+              <strong>Europe (Portugal, Norway, Italy, etc.):</strong> 12–20 weeks<br/>
+              <br/>
+              These timelines depend on document readiness, medical results, and
+              employer confirmation. We process as fast as legally possible.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item" data-category="process">
+          <div class="faq-question" onclick="toggleFAQ(this)">
+            <span class="faq-question-text">What documents do I need to apply?</span>
+            <div class="faq-icon">+</div>
+          </div>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              Basic documents required for most destinations:
+              <ul style="margin:12px 0 0 16px;display:flex;flex-direction:column;gap:6px;">
+                <li>✅ Valid Passport (minimum 2 years validity remaining)</li>
+                <li>✅ National ID Card (NID)</li>
+                <li>✅ Recent passport-size photographs</li>
+                <li>✅ Educational / trade certificates (if applicable)</li>
+                <li>✅ Police clearance certificate</li>
+                <li>✅ Medical fitness certificate (from approved center)</li>
+              </ul>
+              <br/>
+              Additional documents may be required depending on the destination
+              country and specific job type. We will guide you through everything.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item" data-category="process">
+          <div class="faq-question" onclick="toggleFAQ(this)">
+            <span class="faq-question-text">What is the BMET Smart Card and do I need it?</span>
+            <div class="faq-icon">+</div>
+          </div>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              Yes — the BMET Smart Card is <strong>mandatory</strong> for all
+              Bangladeshi workers going abroad legally. It is issued by the
+              Bureau of Manpower, Employment and Training (BMET) and confirms
+              that your migration was registered with the government.
+              <br/><br/>
+              Without it, your migration is considered illegal. We handle the
+              BMET clearance process for every worker we deploy — at no
+              additional hidden cost.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item" data-category="process">
+          <div class="faq-question" onclick="toggleFAQ(this)">
+            <span class="faq-question-text">What is Pre-Departure Orientation (PDO)?</span>
+            <div class="faq-icon">+</div>
+          </div>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              Pre-Departure Orientation is a briefing session we provide to all
+              workers before they fly. It covers:
+              <ul style="margin:12px 0 0 16px;display:flex;flex-direction:column;gap:6px;">
+                <li>🗺️ Culture and customs of the destination country</li>
+                <li>⚖️ Local labor laws and your rights as a worker</li>
+                <li>🏥 Safety regulations and emergency contacts</li>
+                <li>💵 How to send money home (remittance)</li>
+                <li>📞 What to do if problems arise abroad</li>
+              </ul>
+              <br/>
+              PDO is included in our service — no extra charge.
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+
+      <!-- ── CATEGORY: FEES ── -->
+      <div class="faq-group" id="group-fees" data-aos="fade-up">
+        <div class="faq-group-title">
+          <span>💰</span> Fees & Service Charges
+        </div>
+
+        <div class="info-box">
+          <div class="info-box-icon">⚠️</div>
+          <div class="info-box-text">
+            <strong>Our commitment:</strong> We never charge hidden fees.
+            All service charges are disclosed upfront before you sign anything.
+            If an agent asks you for money before showing you a verified job
+            offer and contract — that is a red flag.
+          </div>
+        </div>
+
+        <div class="faq-item" data-category="fees">
+          <div class="faq-question" onclick="toggleFAQ(this)">
+            <span class="faq-question-text">How much does it cost to go abroad through Yakeen International?</span>
+            <div class="faq-icon">+</div>
+          </div>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              Service charges vary by destination country and job type. All fees
+              are clearly stated in your contract before you agree to anything.
+              <br/><br/>
+              We are committed to keeping our charges <strong>reasonable and
+              transparent</strong>. We will never ask you to pay more than
+              what is agreed in writing.
+              <br/><br/>
+              Contact us directly for a fee breakdown for your specific
+              destination and job category.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item" data-category="fees">
+          <div class="faq-question" onclick="toggleFAQ(this)">
+            <span class="faq-question-text">Are there any hidden charges I should know about?</span>
+            <div class="faq-icon">+</div>
+          </div>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              <strong>Absolutely not.</strong> We have a strict no-hidden-fees
+              policy. Everything we charge is written in your agreement:
+              <ul style="margin:12px 0 0 16px;display:flex;flex-direction:column;gap:6px;">
+                <li>✅ Service charge — stated upfront</li>
+                <li>✅ Medical test fee — standard government rate</li>
+                <li>✅ BMET clearance — standard government rate</li>
+                <li>✅ Visa fee — charged as received from embassy</li>
+              </ul>
+              <br/>
+              There are <strong>no surprise fees</strong> at any stage. If you
+              are ever asked for extra money not in your contract, please
+              report it to us immediately.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item" data-category="fees">
+          <div class="faq-question" onclick="toggleFAQ(this)">
+            <span class="faq-question-text">Do I need to pay anything before getting a confirmed job offer?</span>
+            <div class="faq-icon">+</div>
+          </div>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              <strong>No.</strong> You should never pay any significant fees
+              before receiving a verified job offer and a signed employment
+              contract. Registration and initial consultation with us is free.
+              <br/><br/>
+              Be very cautious of agencies that demand large upfront payments
+              before showing any confirmed job. This is one of the most common
+              fraud tactics in Bangladesh.
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+
+      <!-- ── CATEGORY: VISA ── -->
+      <div class="faq-group" id="group-visa" data-aos="fade-up">
+        <div class="faq-group-title">
+          <span>🛂</span> Visa & Documentation
+        </div>
+
+        <div class="faq-item" data-category="visa">
+          <div class="faq-question" onclick="toggleFAQ(this)">
+            <span class="faq-question-text">What documents do I need for a Middle East labor visa?</span>
+            <div class="faq-icon">+</div>
+          </div>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              For countries like Saudi Arabia and UAE, you typically need:
+              <ul style="margin:12px 0 0 16px;display:flex;flex-direction:column;gap:6px;">
+                <li>✅ Valid passport (6+ months validity)</li>
+                <li>✅ Medical fitness certificate (GAMCA approved center)</li>
+                <li>✅ Verified employment contract from employer</li>
+                <li>✅ National ID (NID)</li>
+                <li>✅ Police clearance certificate</li>
+                <li>✅ BMET Smart Card</li>
+                <li>✅ Passport-size photos</li>
+              </ul>
+              <br/>
+              We guide you through every document and ensure everything
+              is correct before submission to avoid delays.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item" data-category="visa">
+          <div class="faq-question" onclick="toggleFAQ(this)">
+            <span class="faq-question-text">How can I track my visa application status?</span>
+            <div class="faq-icon">+</div>
+          </div>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              You can track your visa status in real time using our
+              <strong>Visa Tracker</strong> — a unique feature on our website.
+              Simply enter your passport number and you'll instantly see which
+              stage your application is at:
+              <br/><br/>
+              📋 Applied → 🏥 Medical Done → 🛂 Visa Stamped → ✈️ Ticket Issued → 🌍 Deployed
+              <br/><br/>
+              <a href="visa-tracker.html" class="btn btn-outline" style="margin-top:8px;display:inline-flex;">
+                <i class="fas fa-search"></i> Track My Visa Now
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item" data-category="visa">
+          <div class="faq-question" onclick="toggleFAQ(this)">
+            <span class="faq-question-text">What should I expect when working in Saudi Arabia?</span>
+            <div class="faq-icon">+</div>
+          </div>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              Saudi Arabia is one of the top destinations for Bangladeshi workers.
+              Here's what to expect:
+              <br/><br/>
+              <strong>Work Culture:</strong> Professional, punctual, and structured.
+              Friday is the official day off. Dress modestly.<br/><br/>
+              <strong>Labor Law:</strong> KSA labor law protects workers. You are
+              entitled to a contract, rest days, accommodation, and medical care.<br/><br/>
+              <strong>Kafala System:</strong> Your employer sponsors your visa.
+              Ensure your contract matches your verbal agreement before signing.<br/><br/>
+              <strong>Salary:</strong> Usually paid monthly in SAR (Saudi Riyal).
+              You can send money home via bank transfer or money exchange services.<br/><br/>
+              We cover all of this in our Pre-Departure Orientation for KSA-bound workers.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item" data-category="visa">
+          <div class="faq-question" onclick="toggleFAQ(this)">
+            <span class="faq-question-text">What should I know about working in Japan?</span>
+            <div class="faq-icon">+</div>
+          </div>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              Japan has strict workplace standards and cultural norms:
+              <br/><br/>
+              <strong>Punctuality:</strong> Extremely important. Being late —
+              even by a few minutes — is considered very disrespectful.<br/><br/>
+              <strong>Work Ethic:</strong> Japanese workplaces value discipline,
+              teamwork, and attention to detail highly.<br/><br/>
+              <strong>Language:</strong> Basic Japanese phrases will help you
+              significantly. We advise workers to learn numbers, greetings,
+              and safety terms before departure.<br/><br/>
+              <strong>Specified Skilled Worker (SSW) Visa:</strong> Japan
+              requires passing a skills test and Japanese Language test for
+              most job categories.<br/><br/>
+              We provide preparation guidance for Japan-bound workers in our PDO.
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+
+      <!-- ── CATEGORY: SCAMS ── -->
+      <div class="faq-group" id="group-scam" data-aos="fade-up">
+        <div class="faq-group-title">
+          <span>🛡️</span> Avoiding
+          Visa Scams
+        </div>
+
+        <div class="info-box" style="background:rgba(239,68,68,0.05);border-color:rgba(239,68,68,0.2);">
+          <div class="info-box-icon">🚨</div>
+          <div class="info-box-text">
+            <strong style="color:#dc2626;">Important:</strong> Bangladesh's manpower
+            industry has serious fraud problems. Read this section carefully —
+            it could save you from losing your savings or your safety.
+          </div>
+        </div>
+
+        <div class="faq-item" data-category="scam">
+          <div class="faq-question" onclick="toggleFAQ(this)">
+            <span class="faq-question-text">How do I avoid visa scams in Bangladesh?</span>
+            <div class="faq-icon">+</div>
+          </div>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              Visa fraud is unfortunately very common. Here are the key warning
+              signs to watch out for:
+              <br/><br/>
+              <strong style="color:#dc2626;">🚩 Red Flags — Avoid if you see these:</strong>
+              <ul style="margin:12px 0 12px 16px;display:flex;flex-direction:column;gap:8px;">
+                <li>Agent demands large cash payment before showing any job offer</li>
+                <li>Job offer is via WhatsApp only — no formal document</li>
+                <li>Salary promised seems unrealistically high</li>
+                <li>Agency has no BMET license or BAIRA membership</li>
+                <li>You are asked to travel on a tourist visa for a "work" trip</li>
+                <li>No written contract before payment</li>
+                <li>Pressure to "pay now or lose the slot"</li>
+              </ul>
+              <strong style="color:#16a34a;">✅ Safe Signs — What a legitimate agency does:</strong>
+              <ul style="margin:12px 0 0 16px;display:flex;flex-direction:column;gap:8px;">
+                <li>Shows you a verified demand letter from the employer</li>
+                <li>Provides a written contract before taking payment</li>
+                <li>Has a physical office and verifiable license</li>
+                <li>Does not rush or pressure you</li>
+                <li>Is registered with BMET and BAIRA</li>
+                <li>Processes your BMET Smart Card legally</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item" data-category="scam">
+          <div class="faq-question" onclick="toggleFAQ(this)">
+            <span class="faq-question-text">What is a "free visa" and should I trust it?</span>
+            <div class="faq-icon">+</div>
+          </div>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              A "free visa" typically refers to a visa where the employer covers
+              the visa fees — this <strong>can</strong> be legitimate for some
+              countries and job types.
+              <br/><br/>
+              However, many fraudulent agents use the term "free visa" to attract
+              victims and then charge hidden fees later, or provide tourist visas
+              instead of proper work visas.
+              <br/><br/>
+              <strong>Always verify:</strong>
+              <ul style="margin:12px 0 0 16px;display:flex;flex-direction:column;gap:6px;">
+                <li>✅ Is the visa a proper <em>work</em> visa (not tourist)?</li>
+                <li>✅ Is there a signed employment contract?</li>
+                <li>✅ Does the demand letter match the job and salary offered?</li>
+                <li>✅ Is BMET clearance being processed?</li>
+              </ul>
+              <br/>
+              If in doubt, contact BMET or BAIRA to verify the agency's legitimacy.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item" data-category="scam">
+          <div class="faq-question" onclick="toggleFAQ(this)">
+            <span class="faq-question-text">What should I do if I've been scammed by a recruitment agency?</span>
+            <div class="faq-icon">+</div>
+          </div>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              If you believe you have been defrauded:
+              <br/><br/>
+              <strong>1. File a complaint with BMET:</strong><br/>
+              Bureau of Manpower, Employment and Training<br/>
+              Hotline: 16135 | Website: bmet.gov.bd
+              <br/><br/>
+              <strong>2. Contact BAIRA:</strong><br/>
+              Bangladesh Association of International Recruiting Agencies<br/>
+              They can help resolve disputes with member agencies.
+              <br/><br/>
+              <strong>3. File a police report:</strong><br/>
+              Go to your nearest police station and file a General Diary (GD)
+              with all evidence — receipts, contracts, WhatsApp messages.
+              <br/><br/>
+              <strong>4. Contact us:</strong><br/>
+              Even if you didn't use our agency, we are happy to advise you
+              on the right steps to take.
+              <br/><br/>
+              <a href="contact.html" class="btn btn-outline" style="display:inline-flex;margin-top:4px;">
+                <i class="fas fa-phone"></i> Contact Our Office
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item" data-category="scam">
+          <div class="faq-question" onclick="toggleFAQ(this)">
+            <span class="faq-question-text">Is it safe to go abroad as a migrant worker from Bangladesh?</span>
+            <div class="faq-icon">+</div>
+          </div>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              Yes — if done through a <strong>licensed, legitimate agency</strong>
+              with a verified employer and proper legal documentation.
+              <br/><br/>
+              Hundreds of thousands of Bangladeshi workers successfully work
+              abroad every year and send remittances home, building better lives
+              for their families.
+              <br/><br/>
+              The key is to:
+              <ul style="margin:12px 0 0 16px;display:flex;flex-direction:column;gap:6px;">
+                <li>✅ Use a BMET-licensed agency</li>
+                <li>✅ Get a proper work visa — not tourist</li>
+                <li>✅ Have a signed employment contract</li>
+                <li>✅ Complete your BMET Smart Card</li>
+                <li>✅ Attend pre-departure orientation</li>
+              </ul>
+              <br/>
+              At Yakeen International, every deployment follows these steps
+              without exception.
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+
+      <!-- ── CATEGORY: EMPLOYER ── -->
+      <div class="faq-group" id="group-employer" data-aos="fade-up">
+        <div class="faq-group-title">
+          <span>🏢</span> For Employers
+        </div>
+
+        <div class="faq-item" data-category="employer">
+          <div class="faq-question" onclick="toggleFAQ(this)">
+            <span class="faq-question-text">How do I request manpower from Yakeen International?</span>
+            <div class="faq-icon">+</div>
+          </div>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              Simply fill out our
+              <a href="employer.html" style="color:var(--gold);font-weight:600;">
+                Employer Enquiry Form
+              </a>
+              with your company details, required job categories, number of
+              workers, destination country, and timeline.
+              <br/><br/>
+              We will respond within 24 hours with candidate availability
+              and a tailored proposal.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item" data-category="employer">
+          <div class="faq-question" onclick="toggleFAQ(this)">
+            <span class="faq-question-text">How quickly can you supply workers?</span>
+            <div class="faq-icon">+</div>
+          </div>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              Deployment timelines depend on the destination country and
+              visa processing times. Typical timelines:
+              <br/><br/>
+              <strong>Middle East:</strong> 4–8 weeks from confirmed order<br/>
+              <strong>Asia Pacific:</strong> 8–16 weeks<br/>
+              <strong>Europe:</strong> 12–20 weeks<br/>
+              <br/>
+              For urgent requirements, we can fast-track screening and
+              documentation. Contact us to discuss your timeline.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item" data-category="employer">
+          <div class="faq-question" onclick="toggleFAQ(this)">
+            <span class="faq-question-text">Do you conduct trade tests and skill assessments?</span>
+            <div class="faq-icon">+</div>
+          </div>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              Yes — rigorous trade testing is a core part of our process.
+              We test candidates hands-on for their specific trade:
+              <ul style="margin:12px 0 0 16px;display:flex;flex-direction:column;gap:6px;">
+                <li>🔧 Welders are tested on weld quality and technique</li>
+                <li>🚛 Drivers complete a practical driving assessment</li>
+                <li>⚡ Electricians are tested on wiring and safety protocols</li>
+                <li>🏗️ Masons demonstrate brick laying and finishing</li>
+              </ul>
+              <br/>
+              Only candidates who pass these tests are shortlisted for
+              employer consideration. You receive only pre-verified talent.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq-item" data-category="employer">
+          <div class="faq-question" onclick="toggleFAQ(this)">
+            <span class="faq-question-text">Can we conduct video interviews with candidates?</span>
+            <div class="faq-icon">+</div>
+          </div>
+          <div class="faq-answer">
+            <div class="faq-answer-inner">
+              Absolutely. After shortlisting, we can arrange video interviews
+              between your team and our pre-screened candidates via Zoom,
+              WhatsApp Video, or any platform you prefer.
+              <br/><br/>
+              We also provide detailed candidate CVs with photo, skills
+              assessment results, and work history for your review before
+              any interview.
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Still have questions? -->
+      <div style="text-align:center;padding:40px;background:var(--off-white);border-radius:var(--radius-lg);border:1px solid rgba(201,160,48,0.15);" data-aos="fade-up">
+        <div style="font-size:2rem;margin-bottom:12px;">🤝</div>
+        <h3 style="font-size:1.1rem;font-weight:700;color:var(--navy-dark);margin-bottom:8px;">
+          Still Have Questions?
+        </h3>
+        <p style="font-size:0.88rem;color:var(--text-body);margin-bottom:20px;line-height:1.7;">
+          Our team is available Sun–Thu 9am–6pm to answer any questions you have.
+          Don't hesitate to reach out — there are no silly questions when your
+          future is at stake.
+        </p>
+        <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+          <a href="contact.html" class="btn btn-primary">
+            <i class="fas fa-phone"></i> Contact Us
+          </a>
+          <a href="vacancies.html" class="btn btn-navy">
+            <i class="fas fa-briefcase"></i> View Vacancies
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ============================================
+       FOOTER
+  ============================================ -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <img src="assets/logos/yakeen-logo.png" alt="Yakeen International" class="footer-logo" />
+          <p class="footer-brand-desc">
+            A trusted overseas manpower recruitment agency committed to ethical,
+            transparent, and legal placement of Bangladeshi workers worldwide.
+          </p>
+          <div class="footer-social">
+            <a href="#" class="social-btn"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" class="social-btn"><i class="fab fa-whatsapp"></i></a>
+            <a href="#" class="social-btn"><i class="fab fa-youtube"></i></a>
+            <a href="#" class="social-btn"><i class="fab fa-linkedin-in"></i></a>
+          </div>
+        </div>
+        <div>
+          <h4 class="footer-col-title">Quick Links</h4>
+          <ul class="footer-links">
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="services.html">Our Services</a></li>
+            <li><a href="vacancies.html">Current Vacancies</a></li>
+            <li><a href="visa-tracker.html">Visa Tracker</a></li>
+            <li><a href="gallery.html">Gallery</a></li>
+            <li><a href="testimonials.html">Testimonials</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer-col-title">Our Services</h4>
+          <ul class="footer-links">
+            <li><a href="services.html">Construction & MEP</a></li>
+            <li><a href="services.html">Industrial & Manufacturing</a></li>
+            <li><a href="services.html">Hospitality & Facilities</a></li>
+            <li><a href="services.html">Transport & Logistics</a></li>
+            <li><a href="services.html">Agriculture</a></li>
+            <li><a href="employer.html">Employer Corner</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer-col-title">Contact Us</h4>
+          <div class="footer-contact-item">
+            <span>📍</span>
+            <span>3rd Floor, House 245,<br/>Barihara DOHS, Bangladesh</span>
+          </div>
+          <div class="footer-contact-item">
+            <span>📞</span>
+            <span>+880 XXXX XXXXXX</span>
+          </div>
+          <div class="footer-contact-item">
+            <span>✉️</span>
+            <span>info@yakeenintl.com</span>
+          </div>
+          <div class="footer-contact-item">
+            <span>🕐</span>
+            <span>Sun – Thu: 9am – 6pm<br/>Fri – Sat: 10am – 2pm</span>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <div class="footer-bottom-text">
+          © 2025 <span>Yakeen International</span>. All rights reserved.
+        </div>
+        <div class="sister-strip">
+          <span>A sister concern of</span>
+          <img src="assets/logos/pigeon-logo.png" alt="Pigeon Overseas" />
+          <span style="color:var(--gold);">Pigeon Overseas RL-0377</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scroll To Top -->
+  <button class="scroll-top" id="scrollTop" onclick="scrollToTop()">
+    <i class="fas fa-chevron-up"></i>
+  </button>
+
+
+  <!-- ============================================
+       SCRIPTS
+  ============================================ -->
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="js/lang.js"></script>
+  <script src="js/main.js"></script>
+
+  <script>
+    AOS.init({ duration: 700, easing: 'ease-out-cubic', once: true, offset: 60 });
+
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 60);
+      document.getElementById('scrollTop').classList.toggle('visible', window.scrollY > 400);
+    });
+
+    function toggleMobileNav() {
+      const nav = document.getElementById('mobileNav');
+      const ham = document.getElementById('hamburger');
+      nav.classList.toggle('open');
+      ham.classList.toggle('open');
+      document.body.style.overflow = nav.classList.contains('open') ? 'hidden' : '';
+    }
+
+    function scrollToTop() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // GSAP hero entrance
+    gsap.from('.page-hero .breadcrumb',       { opacity: 0, y: 20, duration: 0.6, delay: 0.2 });
+    gsap.from('.page-hero .section-tag',      { opacity: 0, y: 20, duration: 0.6, delay: 0.35 });
+    gsap.from('.page-hero .section-title',    { opacity: 0, y: 30, duration: 0.7, delay: 0.5 });
+    gsap.from('.page-hero .gold-divider',     { opacity: 0, scaleX: 0, duration: 0.6, delay: 0.7, transformOrigin: 'center' });
+    gsap.from('.page-hero .section-subtitle', { opacity: 0, y: 20, duration: 0.6, delay: 0.85 });
+
+    // ── FAQ Accordion ──
+    function toggleFAQ(questionEl) {
+      const item = questionEl.closest('.faq-item');
+      const isOpen = item.classList.contains('open');
+
+      // Close all open items
+      document.querySelectorAll('.faq-item.open').forEach(el => {
+        el.classList.remove('open');
+      });
+
+      // Open clicked item if it was closed
+      if (!isOpen) {
+        item.classList.add('open');
+        // Smooth scroll into view on mobile
+        if (window.innerWidth < 768) {
+          setTimeout(() => {
+            item.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          }, 300);
+        }
+      }
+    }
+
+    // ── Category filter ──
+    function filterCategory(category, btn) {
+      // Update active button
+      document.querySelectorAll('.faq-cat-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      // Clear search
+      document.getElementById('faqSearch').value = '';
+
+      const groups = document.querySelectorAll('.faq-group');
+      const items  = document.querySelectorAll('.faq-item');
+
+      // Close all open accordions
+      document.querySelectorAll('.faq-item.open').forEach(el => el.classList.remove('open'));
+
+      if (category === 'all') {
+        groups.forEach(g => g.style.display = '');
+        items.forEach(i => i.style.display = '');
+        document.getElementById('faqNoResults').classList.remove('visible');
+        return;
+      }
+
+      // Show only matching group
+      groups.forEach(g => {
+        g.style.display = g.id === `group-${category}` ? '' : 'none';
+      });
+
+      document.getElementById('faqNoResults').classList.remove('visible');
+    }
+
+    // ── Search ──
+    function searchFAQ() {
+      const query = document.getElementById('faqSearch').value.trim().toLowerCase();
+
+      // Reset category buttons
+      document.querySelectorAll('.faq-cat-btn').forEach(b => b.classList.remove('active'));
+      document.querySelector('.faq-cat-btn').classList.add('active');
+
+      const groups = document.querySelectorAll('.faq-group');
+      const items  = document.querySelectorAll('.faq-item');
+
+      if (!query) {
+        groups.forEach(g => g.style.display = '');
+        items.forEach(i => i.style.display = '');
+        document.getElementById('faqNoResults').classList.remove('visible');
+        return;
+      }
+
+      let anyVisible = false;
+
+      groups.forEach(g => {
+        let groupHasMatch = false;
+
+        g.querySelectorAll('.faq-item').forEach(item => {
+          const questionText = item.querySelector('.faq-question-text').textContent.toLowerCase();
+          const answerText   = item.querySelector('.faq-answer-inner').textContent.toLowerCase();
+          const matches      = questionText.includes(query) || answerText.includes(query);
+
+          item.style.display = matches ? '' : 'none';
+          if (matches) {
+            groupHasMatch = true;
+            anyVisible    = true;
+            // Auto-open matching item
+            item.classList.add('open');
+          } else {
+            item.classList.remove('open');
+          }
+        });
+
+        g.style.display = groupHasMatch ? '' : 'none';
+      });
+
+      document.getElementById('faqNoResults').classList.toggle('visible', !anyVisible);
+    }
+
+    // Allow Enter key on search
+    document.getElementById('faqSearch').addEventListener('keydown', e => {
+      if (e.key === 'Escape') {
+        document.getElementById('faqSearch').value = '';
+        searchFAQ();
+      }
+    });
+
+  </script>
+
+</body>
+</html>
