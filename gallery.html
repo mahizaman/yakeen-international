@@ -244,9 +244,6 @@
 
 <body>
 
-  <!-- ============================================
-       NAVBAR
-  ============================================ -->
   <nav class="navbar" id="navbar">
     <div class="container">
       <a href="index.html" class="navbar-logo">
@@ -281,7 +278,6 @@
     </div>
   </nav>
 
-  <!-- Mobile Nav -->
   <div class="navbar-mobile" id="mobileNav">
     <div class="lang-switcher" style="margin-bottom:16px;">
       <button class="lang-btn active" onclick="switchLang('en')">EN</button>
@@ -303,9 +299,6 @@
   </div>
 
 
-  <!-- ============================================
-       PAGE HERO
-  ============================================ -->
   <section class="page-hero">
     <div class="container">
       <div class="breadcrumb">
@@ -326,22 +319,16 @@
   </section>
 
 
-  <!-- ============================================
-       GALLERY SECTION
-  ============================================ -->
   <section class="section-padding">
     <div class="container">
 
-      <!-- Photo count -->
       <div style="text-align:center;margin-bottom:32px;" data-aos="fade-up">
         <span id="photoCount" style="font-size:0.9rem;color:var(--mid-gray);">
           Loading photos...
         </span>
       </div>
 
-      <!-- Gallery Grid -->
       <div class="gallery-masonry" id="galleryGrid">
-        <!-- Skeletons -->
         <div class="gallery-skeleton" style="height:220px;"></div>
         <div class="gallery-skeleton" style="height:300px;"></div>
         <div class="gallery-skeleton" style="height:180px;"></div>
@@ -350,7 +337,6 @@
         <div class="gallery-skeleton" style="height:340px;"></div>
       </div>
 
-      <!-- Empty state -->
       <div id="galleryEmpty" style="display:none;text-align:center;padding:80px 20px;">
         <div style="font-size:3rem;margin-bottom:16px;">🖼️</div>
         <div style="font-size:1.1rem;font-weight:700;color:var(--navy-dark);margin-bottom:8px;">
@@ -365,9 +351,6 @@
   </section>
 
 
-  <!-- ============================================
-       LIGHTBOX
-  ============================================ -->
   <div class="lightbox" id="lightbox">
     <button class="lightbox-close" onclick="closeLightbox()">
       <i class="fas fa-times"></i>
@@ -386,9 +369,6 @@
   </div>
 
 
-  <!-- ============================================
-       CTA
-  ============================================ -->
   <section class="section-padding bg-off-white">
     <div class="container">
       <div style="text-align:center;max-width:600px;margin:0 auto;" data-aos="fade-up">
@@ -417,9 +397,6 @@
   </section>
 
 
-  <!-- ============================================
-       FOOTER
-  ============================================ -->
   <footer class="footer">
     <div class="container">
       <div class="footer-grid">
@@ -491,19 +468,36 @@
     </div>
   </footer>
 
-  <!-- Scroll To Top -->
   <button class="scroll-top" id="scrollTop" onclick="scrollToTop()">
     <i class="fas fa-chevron-up"></i>
   </button>
 
 
-  <!-- ============================================
-       SCRIPTS
-  ============================================ -->
   <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="js/supabase.js"></script>
+
+  <script>
+    const SUPABASE_URL = 'https://wjhbqhrzwopnmizlumyg.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndqaGJxaHJ6d29wbm1pemx1bXlnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkxODQyMDksImV4cCI6MjA5NDc2MDIwOX0.nPWyaBwX3cnioOYcXkVNLR_31AUeDjevphrtH87srgk';
+
+    const { createClient } = supabase;
+    const db = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    window.getGallery = async function() {
+      const { data, error } = await db
+        .from('gallery')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        console.error("Database Error:", error.message);
+        return [];
+      }
+      return data || [];
+    };
+  </script>
+
   <script src="js/lang.js"></script>
   <script src="js/main.js"></script>
 
