@@ -80,8 +80,9 @@
     }
 
     .login-badge {
-      display: inline-flex;
+      display: flex;
       align-items: center;
+      justify-content: center;
       gap: 6px;
       background: rgba(201,160,48,0.1);
       border: 1px solid rgba(201,160,48,0.3);
@@ -91,8 +92,6 @@
       padding: 5px 14px;
       border-radius: 50px;
       margin: 0 auto 28px;
-      display: flex;
-      justify-content: center;
       width: fit-content;
     }
 
@@ -182,15 +181,9 @@
       color: #dc2626;
       margin-bottom: 16px;
       text-align: center;
-      animation: fadeSlideUp 0.3s ease forwards;
     }
 
     .login-error.visible { display: block; }
-
-    @keyframes fadeSlideUp {
-      from { opacity: 0; transform: translateY(8px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
 
     .login-footer {
       margin-top: 28px;
@@ -201,12 +194,8 @@
       color: var(--mid-gray);
     }
 
-    .login-footer a {
-      color: var(--gold-dark);
-      font-weight: 600;
-    }
+    .login-footer a { color: var(--gold-dark); font-weight: 600; }
 
-    /* Particles */
     .particle {
       position: absolute;
       border-radius: 50%;
@@ -240,7 +229,7 @@
     <!-- Error message -->
     <div class="login-error" id="loginError">
       <i class="fas fa-exclamation-circle"></i>
-      <span id="loginErrorMsg">Invalid email or password. Please try again.</span>
+      <span id="loginErrorMsg">Invalid email or password.</span>
     </div>
 
     <!-- Login form -->
@@ -272,7 +261,6 @@
           type="button"
           class="password-toggle"
           onclick="togglePassword()"
-          id="pwToggle"
         >
           <i class="fas fa-eye" id="pwToggleIcon"></i>
         </button>
@@ -294,11 +282,33 @@
   </div>
 
 
-  <!-- Scripts -->
+  <!-- ============================================
+       SCRIPTS
+  ============================================ -->
+
+  <!-- Load Supabase FIRST -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="../js/supabase.js"></script>
 
   <script>
+    // ── Supabase direct init ──
+    const SUPABASE_URL     = 'https://wjhbqhrzwopnmizlumyg.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndqaGJxaHJ6d29wbm1pemx1bXlnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkxODQyMDksImV4cCI6MjA5NDc2MDIwOX0.nPWyaBwX3cnioOYcXkVNLR_31AUeDjevphrtH87srgk';
+
+    const { createClient } = supabase;
+    const db = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // ── Check if already logged in ──
+    (async function checkSession() {
+      try {
+        const { data } = await db.auth.getSession();
+        if (data.session) {
+          window.location.href = 'dashboard.html';
+        }
+      } catch(e) {
+        console.log('Session check:', e.message);
+      }
+    })();
+
     // ── Generate particles ──
     (function() {
       const body = document.getElementById('loginBody');
@@ -313,14 +323,6 @@
           animation-delay:${Math.random() * 8}s;
         `;
         body.appendChild(p);
-      }
-    })();
-
-    // ── Check if already logged in ──
-    (async function checkSession() {
-      const session = await window.getSession();
-      if (session) {
-        window.location.href = 'dashboard.html';
       }
     })();
 
@@ -339,53 +341,44 @@
       btn.disabled  = true;
 
       try {
-        await window.adminLogin(email, password);
-        // Redirect to dashboard on success
+        const { data, error } = await db.auth.signInWithPassword({
+          email,
+          password
+        });
+
+        if (error) throw error;
+
+        // Success!
         btn.innerHTML = '<i class="fas fa-check"></i> Success! Redirecting...';
         setTimeout(() => {
           window.location.href = 'dashboard.html';
         }, 800);
 
       } catch (err) {
+        console.error('Login error:', err);
         btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Sign In to Admin Panel';
         btn.disabled  = false;
 
-        if (err.message.includes('Invalid login')) {
-          errorMsg.textContent = 'Invalid email or password. Please try again.';
-        } else if (err.message.includes('Email not confirmed')) {
-          errorMsg.textContent = 'Please confirm your email address first.';
-        } else {
-          errorMsg.textContent = 'Login failed. Please check your connection.';
-        }
-
+        errorMsg.textContent = err.message || 'Login failed. Please try again.';
         errorDiv.classList.add('visible');
         document.getElementById('loginPassword').value = '';
         document.getElementById('loginPassword').focus();
       }
     }
 
-    // ── Toggle password visibility ──
+    // ── Toggle password ──
     function togglePassword() {
       const input = document.getElementById('loginPassword');
       const icon  = document.getElementById('pwToggleIcon');
       if (input.type === 'password') {
-        input.type    = 'text';
+        input.type     = 'text';
         icon.className = 'fas fa-eye-slash';
       } else {
-        input.type    = 'password';
+        input.type     = 'password';
         icon.className = 'fas fa-eye';
       }
     }
-
-    // Allow Enter key
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Enter') {
-        document.getElementById('loginForm').requestSubmit();
-      }
-    });
   </script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="../js/supabase.js"></script>
 
 </body>
 </html>
