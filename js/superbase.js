@@ -271,5 +271,14 @@ db.auth.onAuthStateChange((event, session) => {
     }
   }
 });
+// 1. Send data to Supabase
+const { error } = await supabase.from('vacancies').insert([formData]);
+
+if (!error) {
+  alert("Uploaded successfully!");
+  
+  // 2. CALL YOUR FETCH FUNCTION AGAIN HERE!
+  fetchVacancies(); 
+}
 
 console.log('✅ Supabase connected — Yakeen International');
