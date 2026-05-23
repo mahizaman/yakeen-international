@@ -226,10 +226,52 @@
 
 
 <!-- Scripts -->
+<!-- Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="../js/supabase.js"></script>
 
 <script>
+  // ── Supabase direct init ──
+  const SUPABASE_URL      = 'https://wjhbqhrzwopnmizlumyg.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndqaGJxaHJ6d29wbm1pemx1bXlnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkxODQyMDksImV4cCI6MjA5NDc2MDIwOX0.nPWyaBwX3cnioOYcXkVNLR_31AUeDjevphrtH87srgk';
+  const { createClient } = supabase;
+  const db = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  // ── Auth functions ──
+  window.requireAuth = async function() {
+    const { data } = await db.auth.getSession();
+    if (!data.session) { window.location.href = 'login.html'; return false; }
+    return true;
+  };
+  window.getSession = async function() {
+    const { data } = await db.auth.getSession();
+    return data.session;
+  };
+  window.adminLogout = async function() {
+    await db.auth.signOut();
+  };
+
+  // ── Vacancy functions ──
+  window.getVacancies = async function() {
+    const { data, error } = await db.from('vacancies').select('*').order('created_at', { ascending: false });
+    if (error) throw error;
+    return data || [];
+  };
+  window.addVacancy = async function(vacancy) {
+    const { data, error } = await db.from('vacancies').insert([vacancy]).select();
+    if (error) throw error;
+    return data;
+  };
+  window.updateVacancy = async function(id, updates) {
+    const { data, error } = await db.from('vacancies').update(updates).eq('id', id).select();
+    if (error) throw error;
+    return data;
+  };
+  window.deleteVacancy = async function(id) {
+    const { error } = await db.from('vacancies').delete().eq('id', id);
+    if (error) throw error;
+    return true;
+  };
+
   const countryFlags = {
     'Saudi Arabia':'🇸🇦','UAE':'🇦🇪','Japan':'🇯🇵',
     'Vietnam':'🇻🇳','Maldives':'🇲🇻','Malaysia':'🇲🇾',
@@ -237,84 +279,52 @@
     'Malta':'🇲🇹','Italy':'🇮🇹'
   };
 
-  let allVacancies  = [];
+  let allVacancies   = [];
   let deleteTargetId = null;
 
-  // ── Auth + init ──
   (async function init() {
     const ok = await window.requireAuth();
     if (!ok) return;
-
     const session = await window.getSession();
     const email   = session.user.email;
     document.getElementById('adminEmail').textContent  = email;
     document.getElementById('adminAvatar').textContent = email[0].toUpperCase();
-
     loadVacancies();
   })();
 
-  // ── Load vacancies ──
   async function loadVacancies() {
     const tbody = document.getElementById('vacanciesTableBody');
     try {
       allVacancies = await window.getVacancies();
       document.getElementById('vacancyCount').textContent =
         `${allVacancies.length} vacanc${allVacancies.length !== 1 ? 'ies' : 'y'} total`;
-
       if (allVacancies.length === 0) {
-        tbody.innerHTML = `
-          <tr>
-            <td colspan="8" style="text-align:center;padding:48px;color:var(--mid-gray);">
-              <div style="font-size:2rem;margin-bottom:10px;">📋</div>
-              No vacancies yet.
-              <button onclick="openModal()" style="background:none;border:none;color:var(--gold);font-weight:700;cursor:pointer;font-size:0.88rem;">
-                Add your first one →
-              </button>
-            </td>
-          </tr>`;
+        tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:48px;color:var(--mid-gray);">
+          No vacancies yet. <button onclick="openModal()" style="background:none;border:none;color:var(--gold);font-weight:700;cursor:pointer;">Add your first one →</button>
+        </td></tr>`;
         return;
       }
-
       tbody.innerHTML = allVacancies.map(v => `
         <tr>
-          <td style="font-weight:600;color:var(--navy-dark);">
-            ${countryFlags[v.country] || '🌍'} ${v.title}
-          </td>
+          <td style="font-weight:600;color:var(--navy-dark);">${countryFlags[v.country]||'🌍'} ${v.title}</td>
           <td>${v.country}</td>
           <td><span class="badge badge-navy" style="font-size:0.72rem;">${v.category}</span></td>
-          <td style="color:var(--text-body);font-size:0.85rem;">${v.salary || '—'}</td>
-          <td style="text-align:center;">${v.slots || '—'}</td>
-          <td style="text-align:center;">
-            <span class="badge ${v.is_urgent ? 'badge-gold' : ''}" style="font-size:0.72rem;">
-              ${v.is_urgent ? '🔥 Yes' : 'No'}
-            </span>
-          </td>
-          <td style="color:var(--mid-gray);font-size:0.82rem;">
-            ${new Date(v.created_at).toLocaleDateString('en-GB')}
-          </td>
+          <td style="font-size:0.85rem;">${v.salary||'—'}</td>
+          <td style="text-align:center;">${v.slots||'—'}</td>
+          <td style="text-align:center;"><span class="badge ${v.is_urgent?'badge-gold':''}" style="font-size:0.72rem;">${v.is_urgent?'🔥 Yes':'No'}</span></td>
+          <td style="color:var(--mid-gray);font-size:0.82rem;">${new Date(v.created_at).toLocaleDateString('en-GB')}</td>
           <td>
             <div class="admin-action-btns">
-              <button class="admin-btn-edit" onclick="openEditModal(${v.id})">
-                <i class="fas fa-edit"></i> Edit
-              </button>
-              <button class="admin-btn-delete" onclick="openDeleteModal(${v.id}, '${v.title.replace(/'/g,"\\'")}')">
-                <i class="fas fa-trash"></i>
-              </button>
+              <button class="admin-btn-edit" onclick="openEditModal(${v.id})"><i class="fas fa-edit"></i> Edit</button>
+              <button class="admin-btn-delete" onclick="openDeleteModal(${v.id},'${v.title.replace(/'/g,"\\'")}')"><i class="fas fa-trash"></i></button>
             </div>
           </td>
         </tr>`).join('');
-
-    } catch (err) {
-      tbody.innerHTML = `
-        <tr>
-          <td colspan="8" style="text-align:center;padding:32px;color:#dc2626;">
-            Failed to load vacancies. Please refresh.
-          </td>
-        </tr>`;
+    } catch(err) {
+      tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:32px;color:#dc2626;">Failed to load. Please refresh.</td></tr>`;
     }
   }
 
-  // ── Modal open/close ──
   function openModal() {
     document.getElementById('modalTitle').textContent  = 'Add New Vacancy';
     document.getElementById('saveBtnText').textContent = 'Save Vacancy';
@@ -323,143 +333,104 @@
     document.getElementById('vacancyModal').classList.add('open');
   }
 
-  function closeModal() {
-    document.getElementById('vacancyModal').classList.remove('open');
-  }
+  function closeModal() { document.getElementById('vacancyModal').classList.remove('open'); }
 
   function openEditModal(id) {
     const v = allVacancies.find(x => x.id === id);
     if (!v) return;
-
     document.getElementById('modalTitle').textContent  = 'Edit Vacancy';
     document.getElementById('saveBtnText').textContent = 'Update Vacancy';
-    document.getElementById('editId').value      = v.id;
-    document.getElementById('fTitle').value      = v.title || '';
-    document.getElementById('fCountry').value    = v.country || '';
-    document.getElementById('fCategory').value   = v.category || '';
-    document.getElementById('fSalary').value     = v.salary || '';
-    document.getElementById('fSlots').value      = v.slots || '';
-    document.getElementById('fUrgent').value     = v.is_urgent ? 'true' : 'false';
-    document.getElementById('fDescription').value = v.description || '';
-
+    document.getElementById('editId').value       = v.id;
+    document.getElementById('fTitle').value       = v.title||'';
+    document.getElementById('fCountry').value     = v.country||'';
+    document.getElementById('fCategory').value    = v.category||'';
+    document.getElementById('fSalary').value      = v.salary||'';
+    document.getElementById('fSlots').value       = v.slots||'';
+    document.getElementById('fUrgent').value      = v.is_urgent?'true':'false';
+    document.getElementById('fDescription').value = v.description||'';
     document.getElementById('vacancyModal').classList.add('open');
   }
 
-  // ── Save (add or update) ──
   async function saveVacancy(e) {
     e.preventDefault();
-
     const saveBtn = document.getElementById('saveBtn');
     saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
     saveBtn.disabled  = true;
-
     const payload = {
       title:       document.getElementById('fTitle').value.trim(),
       country:     document.getElementById('fCountry').value,
       category:    document.getElementById('fCategory').value,
-      salary:      document.getElementById('fSalary').value.trim() || null,
-      slots:       parseInt(document.getElementById('fSlots').value) || null,
-      is_urgent:   document.getElementById('fUrgent').value === 'true',
-      description: document.getElementById('fDescription').value.trim() || null,
+      salary:      document.getElementById('fSalary').value.trim()||null,
+      slots:       parseInt(document.getElementById('fSlots').value)||null,
+      is_urgent:   document.getElementById('fUrgent').value==='true',
+      description: document.getElementById('fDescription').value.trim()||null,
     };
-
     const editId = document.getElementById('editId').value;
-
     try {
-      if (editId) {
-        await window.updateVacancy(parseInt(editId), payload);
-        showToast('✅ Vacancy updated successfully!');
-      } else {
-        await window.addVacancy(payload);
-        showToast('✅ Vacancy added successfully!');
-      }
-
+      if (editId) { await window.updateVacancy(parseInt(editId), payload); showToast('✅ Vacancy updated!'); }
+      else        { await window.addVacancy(payload);                      showToast('✅ Vacancy added!'); }
       closeModal();
       loadVacancies();
-
-    } catch (err) {
-      showToast('❌ Error: ' + err.message, true);
+    } catch(err) {
+      showToast('❌ Error: '+err.message, true);
     } finally {
       saveBtn.innerHTML = '<i class="fas fa-save"></i> <span id="saveBtnText">Save Vacancy</span>';
       saveBtn.disabled  = false;
     }
   }
 
-  // ── Delete modal ──
   function openDeleteModal(id, title) {
     deleteTargetId = id;
     document.getElementById('deleteJobTitle').textContent = title;
     document.getElementById('deleteModal').classList.add('open');
   }
-
   function closeDeleteModal() {
     deleteTargetId = null;
     document.getElementById('deleteModal').classList.remove('open');
   }
-
   async function confirmDelete() {
     if (!deleteTargetId) return;
-
     const btn = document.getElementById('deleteConfirmBtn');
     btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Deleting...';
     btn.disabled  = true;
-
     try {
       await window.deleteVacancy(deleteTargetId);
       showToast('🗑️ Vacancy deleted.');
       closeDeleteModal();
       loadVacancies();
-    } catch (err) {
-      showToast('❌ Delete failed: ' + err.message, true);
+    } catch(err) {
+      showToast('❌ Delete failed: '+err.message, true);
     } finally {
       btn.innerHTML = '<i class="fas fa-trash"></i> Yes, Delete';
       btn.disabled  = false;
     }
   }
 
-  // ── Close modals on backdrop click ──
-  document.getElementById('vacancyModal').addEventListener('click', function(e) {
-    if (e.target === this) closeModal();
-  });
+  document.getElementById('vacancyModal').addEventListener('click', function(e) { if(e.target===this) closeModal(); });
+  document.getElementById('deleteModal').addEventListener('click',  function(e) { if(e.target===this) closeDeleteModal(); });
+  document.addEventListener('keydown', e => { if(e.key==='Escape'){ closeModal(); closeDeleteModal(); }});
 
-  document.getElementById('deleteModal').addEventListener('click', function(e) {
-    if (e.target === this) closeDeleteModal();
-  });
-
-  // ── Toast notification ──
-  function showToast(msg, isError = false) {
+  function showToast(msg, isError=false) {
     const toast = document.getElementById('toast');
-    const toastMsg = document.getElementById('toastMsg');
-    toastMsg.textContent = msg;
+    document.getElementById('toastMsg').textContent = msg;
     toast.style.background = isError ? '#dc2626' : 'var(--navy-dark)';
     toast.style.display = 'flex';
-    setTimeout(() => { toast.style.display = 'none'; }, 3500);
+    setTimeout(() => { toast.style.display='none'; }, 3500);
   }
 
-  // ── Logout ──
   async function handleLogout() {
-    if (!confirm('Are you sure you want to log out?')) return;
+    if (!confirm('Log out?')) return;
     await window.adminLogout();
     window.location.href = 'login.html';
   }
 
-  // ── Escape key closes modals ──
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') {
-      closeModal();
-      closeDeleteModal();
-    }
-  });
-
-  // ── Toast animation style ──
   const s = document.createElement('style');
-  s.textContent = `
-    @keyframes fadeSlideUp {
-      from { opacity:0; transform:translateY(-10px); }
-      to   { opacity:1; transform:translateY(0); }
-    }`;
+  s.textContent = `@keyframes fadeSlideUp{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}`;
   document.head.appendChild(s);
 </script>
 
 </body>
 </html>
+
+
+

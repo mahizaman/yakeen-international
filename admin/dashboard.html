@@ -191,102 +191,148 @@
 
 
     <!-- Load Supabase FIRST -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+ <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../js/supabase.js"></script>
 
-  <script>
-    // ── Supabase direct init (no external file needed) ──
-    const SUPABASE_URL = 'https://wjhbqhrzwopnmizlumyg.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndqaGJxaHJ6d29wbm1pemx1bXlnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkxODQyMDksImV4cCI6MjA5NDc2MDIwOX0.nPWyaBwX3cnioOYcXkVNLR_31AUeDjevphrtH87srgk';
+<script>
+  const countryFlags = {
+    'Saudi Arabia':'🇸🇦','UAE':'🇦🇪','Japan':'🇯🇵',
+    'Vietnam':'🇻🇳','Maldives':'🇲🇻','Malaysia':'🇲🇾',
+    'Portugal':'🇵🇹','Spain':'🇪🇸','Norway':'🇳🇴',
+    'Malta':'🇲🇹','Italy':'🇮🇹'
+  };
 
+  // ── Supabase direct init (same as login) ──
+  const SUPABASE_URL      = 'https://wjhbqhrzwopnmizlumyg.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndqaGJxaHJ6d29wbm1pemx1bXlnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkxODQyMDksImV4cCI6MjA5NDc2MDIwOX0.nPWyaBwX3cnioOYcXkVNLR_31AUeDjevphrtH87srgk';
+
+  // Only create client if not already created
+  let dbClient;
+  try {
     const { createClient } = supabase;
-    const db = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    dbClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  } catch(e) {
+    dbClient = window.db;
+  }
 
-    // ── Check if already logged in ──
-    (async function checkSession() {
-      const { data } = await db.auth.getSession();
-      if (data.session) {
-        window.location.href = 'dashboard.html';
+  // ── Auth check — runs ONCE only ──
+  let authChecked = false;
+
+  async function initDashboard() {
+    if (authChecked) return;
+    authChecked = true;
+
+    try {
+      const { data } = await dbClient.auth.getSession();
+
+      if (!data.session) {
+        window.location.replace('login.html');
+        return;
       }
-    })();
 
-    // ── Generate particles ──
-    (function() {
-      const body = document.getElementById('loginBody');
-      for (let i = 0; i < 12; i++) {
-        const p = document.createElement('div');
-        p.classList.add('particle');
-        const size = Math.random() * 5 + 2;
-        p.style.cssText = `
-          width:${size}px; height:${size}px;
-          left:${Math.random() * 100}%;
-          animation-duration:${Math.random() * 15 + 8}s;
-          animation-delay:${Math.random() * 8}s;
-        `;
-        body.appendChild(p);
-      }
-    })();
+      // Set user info
+      const email = data.session.user.email;
+      const name  = email.split('@')[0];
 
-    // ── Handle login ──
-    async function handleLogin(e) {
-      e.preventDefault();
+      document.getElementById('adminEmail').textContent  = email;
+      document.getElementById('adminAvatar').textContent = name[0].toUpperCase();
+      document.getElementById('welcomeName').textContent =
+        'Welcome, ' + name.charAt(0).toUpperCase() + name.slice(1) + '!';
+      document.getElementById('welcomeDate').textContent =
+        new Date().toLocaleDateString('en-GB', {
+          weekday:'long', day:'numeric', month:'long', year:'numeric'
+        });
 
-      const email    = document.getElementById('loginEmail').value.trim();
-      const password = document.getElementById('loginPassword').value;
-      const btn      = document.getElementById('loginBtn');
-      const errorDiv = document.getElementById('loginError');
-      const errorMsg = document.getElementById('loginErrorMsg');
+      // Load data
+      loadStats();
+      loadRecentVacancies();
 
-      errorDiv.classList.remove('visible');
-      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing in...';
-      btn.disabled  = true;
-
-      try {
-        const { data, error } = await db.auth.signInWithPassword({ email, password });
-
-        if (error) throw error;
-
-        btn.innerHTML = '<i class="fas fa-check"></i> Success! Redirecting...';
-        setTimeout(() => {
-          window.location.href = 'dashboard.html';
-        }, 800);
-
-      } catch (err) {
-        btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Sign In to Admin Panel';
-        btn.disabled  = false;
-
-        if (err.message.includes('Invalid login') || err.message.includes('invalid')) {
-          errorMsg.textContent = 'Invalid email or password. Please try again.';
-        } else if (err.message.includes('Email not confirmed')) {
-          errorMsg.textContent = 'Please confirm your email address first.';
-        } else {
-          errorMsg.textContent = 'Error: ' + err.message;
-        }
-
-        errorDiv.classList.add('visible');
-        document.getElementById('loginPassword').value = '';
-      }
+    } catch(err) {
+      console.error('Auth error:', err);
     }
+  }
 
-    // ── Toggle password visibility ──
-    function togglePassword() {
-      const input = document.getElementById('loginPassword');
-      const icon  = document.getElementById('pwToggleIcon');
-      if (input.type === 'password') {
-        input.type     = 'text';
-        icon.className = 'fas fa-eye-slash';
-      } else {
-        input.type     = 'password';
-        icon.className = 'fas fa-eye';
-      }
+  async function loadStats() {
+    try {
+      const [v, vis, g, t] = await Promise.all([
+        dbClient.from('vacancies').select('*', { count: 'exact', head: true }),
+        dbClient.from('visa_tracking').select('*', { count: 'exact', head: true }),
+        dbClient.from('gallery').select('*', { count: 'exact', head: true }),
+        dbClient.from('testimonials').select('*', { count: 'exact', head: true }),
+      ]);
+
+      document.getElementById('statVacancies').textContent    = v.count    || 0;
+      document.getElementById('statVisa').textContent         = vis.count  || 0;
+      document.getElementById('statGallery').textContent      = g.count    || 0;
+      document.getElementById('statTestimonials').textContent = t.count    || 0;
+
+    } catch(err) {
+      console.error('Stats error:', err);
     }
+  }
 
-    // Allow Enter key
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Enter') {
-        document.getElementById('loginForm').requestSubmit();
+  async function loadRecentVacancies() {
+    const tbody = document.getElementById('recentVacanciesBody');
+    try {
+      const { data } = await dbClient
+        .from('vacancies')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(8);
+
+      if (!data || data.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="6" style="text-align:center;padding:32px;color:var(--mid-gray);">
+              No vacancies yet.
+              <a href="vacancies.html" style="color:var(--gold);">Add one →</a>
+            </td>
+          </tr>`;
+        return;
       }
-    });
-  </script>
+
+      tbody.innerHTML = data.map(v => `
+        <tr>
+          <td style="font-weight:600;color:var(--navy-dark);">
+            ${countryFlags[v.country] || '🌍'} ${v.title}
+          </td>
+          <td>${v.country}</td>
+          <td>
+            <span class="badge badge-navy" style="font-size:0.72rem;">
+              ${v.category}
+            </span>
+          </td>
+          <td>${v.slots || '—'}</td>
+          <td>
+            <span class="badge ${v.is_urgent ? 'badge-gold' : 'badge-green'}" style="font-size:0.72rem;">
+              ${v.is_urgent ? '🔥 Urgent' : '✅ Active'}
+            </span>
+          </td>
+          <td style="color:var(--mid-gray);font-size:0.82rem;">
+            ${new Date(v.created_at).toLocaleDateString('en-GB')}
+          </td>
+        </tr>`).join('');
+
+    } catch(err) {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="6" style="text-align:center;padding:32px;color:#dc2626;">
+            Failed to load vacancies.
+          </td>
+        </tr>`;
+    }
+  }
+
+  async function handleLogout() {
+    if (!confirm('Are you sure you want to log out?')) return;
+    await dbClient.auth.signOut();
+    window.location.replace('login.html');
+  }
+
+  // ── Run once on page load ──
+  document.addEventListener('DOMContentLoaded', initDashboard);
+</script>
+
 
 </body>
 </html>
