@@ -70,7 +70,6 @@ window.deleteVacancy = async function (id) {
   return true;
 };
 
-
 // ============================================
 //   VISA TRACKING
 // ============================================
@@ -139,7 +138,6 @@ window.deleteVisaRecord = async function (id) {
   return true;
 };
 
-
 // ============================================
 //   GALLERY
 // ============================================
@@ -176,7 +174,6 @@ window.deleteGalleryPhoto = async function (id) {
   if (error) throw error;
   return true;
 };
-
 
 // ============================================
 //   TESTIMONIALS
@@ -227,7 +224,6 @@ window.deleteTestimonial = async function (id) {
   return true;
 };
 
-
 // ============================================
 //   ADMIN AUTH
 // ============================================
@@ -271,14 +267,5 @@ db.auth.onAuthStateChange((event, session) => {
     }
   }
 });
-// 1. Send data to Supabase
-const { error } = await supabase.from('vacancies').insert([formData]);
-
-if (!error) {
-  alert("Uploaded successfully!");
-  
-  // 2. CALL YOUR FETCH FUNCTION AGAIN HERE!
-  fetchVacancies(); 
-}
 
 console.log('✅ Supabase connected — Yakeen International');
