@@ -15,215 +15,47 @@
   <link rel="stylesheet" href="css/style.css" />
 
   <style>
-    /* ── Course Grid Styles ── */
-    .course-filter-bar {
-      display: flex;
-      gap: 16px;
-      margin-bottom: 40px;
-      flex-wrap: wrap;
-      background: var(--white);
-      padding: 16px;
-      border-radius: var(--radius-md);
-      box-shadow: var(--shadow-sm);
-      border: 1px solid rgba(0,0,0,0.05);
-    }
-
-    .course-search {
-      flex: 1;
-      min-width: 250px;
-      position: relative;
-    }
-
-    .course-search input {
-      width: 100%;
-      padding: 12px 16px 12px 42px;
-      border-radius: var(--radius-sm);
-      border: 1px solid var(--light-gray);
-      font-family: 'Poppins', sans-serif;
-      font-size: 0.9rem;
-      transition: var(--transition);
-    }
-
-    .course-search input:focus {
-      outline: none;
-      border-color: var(--gold);
-    }
-
-    .course-search i {
+    /* Course specific inline tweaks */
+    .premium-lock-overlay {
       position: absolute;
-      left: 16px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--mid-gray);
-    }
-
-    .course-select {
-      padding: 12px 16px;
-      border-radius: var(--radius-sm);
-      border: 1px solid var(--light-gray);
-      font-family: 'Poppins', sans-serif;
-      font-size: 0.9rem;
-      color: var(--navy-dark);
-      background: var(--white);
-      min-width: 180px;
-      cursor: pointer;
-    }
-
-    .course-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-      gap: 24px;
-    }
-
-    .course-card {
-      background: var(--white);
-      border-radius: var(--radius-md);
-      overflow: hidden;
-      box-shadow: var(--shadow-sm);
-      border: 1px solid rgba(0,0,0,0.05);
-      transition: var(--transition);
+      inset: 0;
+      background: rgba(26, 26, 62, 0.7);
       display: flex;
       flex-direction: column;
-      position: relative;
-    }
-
-    .course-card:hover {
-      box-shadow: var(--shadow-lg);
-      transform: translateY(-5px);
-    }
-
-    .course-thumb {
-      width: 100%;
-      aspect-ratio: 16/9;
-      background: var(--navy-dark);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .course-thumb img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      opacity: 0.85;
-      transition: var(--transition);
-    }
-
-    .course-card:hover .course-thumb img {
-      opacity: 1;
-      transform: scale(1.05);
-    }
-
-    .course-play-icon {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 48px;
-      height: 48px;
-      background: rgba(255,255,255,0.2);
-      backdrop-filter: blur(4px);
-      border-radius: 50%;
-      display: flex;
       align-items: center;
       justify-content: center;
-      color: var(--white);
-      font-size: 1.2rem;
-      border: 2px solid rgba(255,255,255,0.5);
+      opacity: 0;
       transition: var(--transition);
+      color: var(--white);
+      font-size: 2rem;
     }
-
-    .course-card:hover .course-play-icon {
-      background: var(--gold);
-      border-color: var(--gold);
-      transform: translate(-50%, -50%) scale(1.1);
+    .course-card[data-price="premium"]:hover .premium-lock-overlay {
+      opacity: 1;
     }
-
-    .course-badges {
-      position: absolute;
-      top: 12px;
-      left: 12px;
-      display: flex;
-      gap: 8px;
-    }
-
-    .badge-premium {
-      background: linear-gradient(135deg, #f59e0b, #d97706);
-      color: white;
-      padding: 4px 10px;
-      border-radius: 50px;
-      font-size: 0.75rem;
-      font-weight: 700;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-    }
-
-    .badge-free {
-      background: linear-gradient(135deg, #10b981, #059669);
-      color: white;
-      padding: 4px 10px;
-      border-radius: 50px;
-      font-size: 0.75rem;
-      font-weight: 700;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-    }
-
-    .course-body {
-      padding: 20px;
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .course-category {
-      font-size: 0.75rem;
-      font-weight: 600;
-      color: var(--gold);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 8px;
-    }
-
-    .course-title {
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: var(--navy-dark);
-      margin-bottom: 12px;
-      line-height: 1.4;
-    }
-
-    .course-meta {
-      display: flex;
+    
+    /* Premium Alert Modal */
+    .premium-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.8);
+      z-index: 9999;
       align-items: center;
-      gap: 16px;
-      font-size: 0.82rem;
-      color: var(--mid-gray);
-      margin-bottom: 20px;
-      padding-bottom: 16px;
-      border-bottom: 1px solid var(--light-gray);
+      justify-content: center;
+      padding: 24px;
     }
-
-    .course-meta span {
+    .premium-modal.open {
       display: flex;
-      align-items: center;
-      gap: 6px;
+      animation: fadeIn 0.3s ease;
     }
-
-    .course-footer {
-      margin-top: auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .course-price {
-      font-size: 1.1rem;
-      font-weight: 800;
-      color: var(--navy-dark);
-    }
-
-    .btn-course {
-      padding: 8px 16px;
-      font-size: 0.85rem;
-      border-radius: var(--radius-sm);
+    .premium-modal-inner {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 40px;
+      text-align: center;
+      max-width: 420px;
+      box-shadow: var(--shadow-lg);
+      position: relative;
     }
   </style>
 </head>
@@ -267,8 +99,7 @@
             <li><a href="gallery.html#testimonials">Testimonials</a></li>
           </ul>
         </li>
-      <li><a href="employer.html">Employer Corner</a></li>
-         <li><a href="faq.html">FAQ</a></li>
+
         <li><a href="contact.html">Contact</a></li>
       </ul>
 
@@ -277,7 +108,7 @@
           <button class="lang-btn active" onclick="switchLang('en')">EN</button>
           <button class="lang-btn" onclick="switchLang('bn')">বাং</button>
         </div>
-        <a href="login.html" class="btn btn-primary" style="padding: 10px 22px; font-size: 0.85rem;">
+        <a href="login.html" id="navAuthBtn" class="btn btn-primary" style="padding: 10px 22px; font-size: 0.85rem;">
           <i class="fas fa-user-circle" style="margin-right:6px;"></i> Login / Register
         </a>
         <div class="hamburger" id="hamburger" onclick="toggleMobileNav()">
@@ -312,11 +143,10 @@
     <a href="gallery.html#photos" class="mobile-sub-link" onclick="toggleMobileNav()">Office Photos</a>
     <a href="gallery.html#testimonials" class="mobile-sub-link" onclick="toggleMobileNav()">Testimonials</a>
 
-    <a href="employer.html" onclick="toggleMobileNav()">Employer Corner</a>
-    <a href="faq.html" onclick="toggleMobileNav()">FAQ</a>
     <a href="contact.html" onclick="toggleMobileNav()">Contact</a>
-    <a href="login.html" class="btn btn-primary" style="margin-top:12px;" onclick="toggleMobileNav()">Login / Register</a>
+    <a href="login.html" id="mobileAuthBtn" class="btn btn-primary" style="margin-top:12px;" onclick="toggleMobileNav()">Login / Register</a>
   </div>
+
 
   <section class="page-hero">
     <div class="container">
@@ -335,6 +165,7 @@
       </p>
     </div>
   </section>
+
 
   <section class="section-padding">
     <div class="container">
@@ -360,90 +191,90 @@
 
       <div class="course-grid" id="courseContainer">
         
-        <div class="course-card filterable" data-category="Etiquette" data-price="free" data-aos="fade-up" data-aos-delay="0">
+        <div class="course-card filterable" data-category="Etiquette" data-price="free" data-aos="fade-up" data-aos-delay="0" onclick="openCourseVideo('https://www.youtube.com/embed/dQw4w9WgXcQ', 'ব্যক্তিগত ও কর্মক্ষেত্রের পরিচ্ছন্নতা (Personal Hygiene)')" style="cursor:pointer;">
           <div class="course-thumb">
             <img src="https://images.unsplash.com/photo-1584515933487-779824d29309?auto=format&fit=crop&q=80&w=800" alt="Personal Hygiene" />
-            <div class="course-badges">
-              <span class="badge-free">Free</span>
-            </div>
+            <div class="course-badges"><span class="badge-free">Free</span></div>
             <div class="course-play-icon"><i class="fas fa-play"></i></div>
           </div>
           <div class="course-body">
             <div class="course-category">Workplace Etiquette</div>
             <div class="course-title">ব্যক্তিগত ও কর্মক্ষেত্রের পরিচ্ছন্নতা (Personal Hygiene)</div>
             <div class="course-meta">
-              <span><i class="fas fa-film"></i> 5 Modules</span>
-              <span><i class="far fa-clock"></i> 10 mins</span>
+              <span><i class="fas fa-film"></i> 1 Video</span>
+              <span><i class="far fa-clock"></i> 5 mins</span>
             </div>
             <div class="course-footer">
               <div class="course-price">Free</div>
-              <button class="btn btn-outline btn-course">Start Learning</button>
+              <button class="btn btn-outline btn-course">Watch Now</button>
             </div>
           </div>
         </div>
 
-        <div class="course-card filterable" data-category="Language" data-price="premium" data-aos="fade-up" data-aos-delay="100">
+        <div class="course-card filterable premium-locked-card" data-category="Language" data-price="premium" data-aos="fade-up" data-aos-delay="100" data-video-url="https://www.youtube.com/embed/dQw4w9WgXcQ" onclick="handlePremiumClick(this, 'Basic Arabic for Construction Workers Part-1')" style="cursor:pointer;">
           <div class="course-thumb">
             <img src="https://images.unsplash.com/photo-1543269865-cbf427effbad?auto=format&fit=crop&q=80&w=800" alt="Arabic Language" />
-            <div class="course-badges">
-              <span class="badge-premium"><i class="fas fa-star" style="font-size:0.6rem;margin-right:4px;"></i>Premium</span>
+            <div class="course-badges"><span class="badge-premium"><i class="fas fa-star" style="font-size:0.6rem;margin-right:4px;"></i>Premium</span></div>
+            <div class="course-play-icon premium-lock-icon"><i class="fas fa-lock"></i></div>
+            <div class="premium-lock-overlay">
+              <i class="fas fa-lock" style="margin-bottom:8px; color:var(--gold);"></i>
+              <span style="font-size:1rem; font-weight:600;">Unlock Course</span>
             </div>
-            <div class="course-play-icon"><i class="fas fa-play"></i></div>
           </div>
           <div class="course-body">
             <div class="course-category">Language Skills</div>
-            <div class="course-title">Basic Arabic for Construction Workers Part-1</div>
+            <div class="course-title premium-course-title">Basic Arabic for Construction Workers Part-1</div>
             <div class="course-meta">
-              <span><i class="fas fa-film"></i> 10 Modules</span>
+              <span><i class="fas fa-film"></i> 1 Video</span>
               <span><i class="far fa-clock"></i> 25 mins</span>
             </div>
             <div class="course-footer">
-              <div class="course-price">৳ 500</div>
-              <button class="btn btn-primary btn-course">Unlock Course</button>
+              <div class="course-price">Premium</div>
+              <button class="btn btn-primary btn-course premium-btn-text">Purchase</button>
             </div>
           </div>
         </div>
 
-        <div class="course-card filterable" data-category="Technical" data-price="premium" data-aos="fade-up" data-aos-delay="200">
+        <div class="course-card filterable premium-locked-card" data-category="Technical" data-price="premium" data-aos="fade-up" data-aos-delay="200" data-video-url="https://www.youtube.com/embed/dQw4w9WgXcQ" onclick="handlePremiumClick(this, 'বিদেশগামী লোড-আনলোড শ্রমিক প্রশিক্ষণ')" style="cursor:pointer;">
           <div class="course-thumb">
             <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&q=80&w=800" alt="Load Unload" />
-            <div class="course-badges">
-              <span class="badge-premium"><i class="fas fa-star" style="font-size:0.6rem;margin-right:4px;"></i>Premium</span>
+            <div class="course-badges"><span class="badge-premium"><i class="fas fa-star" style="font-size:0.6rem;margin-right:4px;"></i>Premium</span></div>
+            <div class="course-play-icon premium-lock-icon"><i class="fas fa-lock"></i></div>
+            <div class="premium-lock-overlay">
+              <i class="fas fa-lock" style="margin-bottom:8px; color:var(--gold);"></i>
+              <span style="font-size:1rem; font-weight:600;">Unlock Course</span>
             </div>
-            <div class="course-play-icon"><i class="fas fa-play"></i></div>
           </div>
           <div class="course-body">
             <div class="course-category">Technical Skills</div>
-            <div class="course-title">বিদেশগামী লোড-আনলোড শ্রমিক প্রশিক্ষণ</div>
+            <div class="course-title premium-course-title">বিদেশগামী লোড-আনলোড শ্রমিক প্রশিক্ষণ</div>
             <div class="course-meta">
-              <span><i class="fas fa-film"></i> 8 Modules</span>
+              <span><i class="fas fa-film"></i> 1 Video</span>
               <span><i class="far fa-clock"></i> 15 mins</span>
             </div>
             <div class="course-footer">
-              <div class="course-price">৳ 300</div>
-              <button class="btn btn-primary btn-course">Unlock Course</button>
+              <div class="course-price">Premium</div>
+              <button class="btn btn-primary btn-course premium-btn-text">Purchase</button>
             </div>
           </div>
         </div>
 
-        <div class="course-card filterable" data-category="Safety" data-price="free" data-aos="fade-up" data-aos-delay="300">
+        <div class="course-card filterable" data-category="Safety" data-price="free" data-aos="fade-up" data-aos-delay="300" onclick="openCourseVideo('https://www.youtube.com/embed/dQw4w9WgXcQ', 'Site Safety & Hazard Awareness')" style="cursor:pointer;">
           <div class="course-thumb">
             <img src="https://images.unsplash.com/photo-1541888081696-61cb7e428489?auto=format&fit=crop&q=80&w=800" alt="Safety" />
-            <div class="course-badges">
-              <span class="badge-free">Free</span>
-            </div>
+            <div class="course-badges"><span class="badge-free">Free</span></div>
             <div class="course-play-icon"><i class="fas fa-play"></i></div>
           </div>
           <div class="course-body">
             <div class="course-category">Safety & Compliance</div>
             <div class="course-title">Site Safety & Hazard Awareness (কর্মক্ষেত্রে নিরাপত্তা)</div>
             <div class="course-meta">
-              <span><i class="fas fa-film"></i> 6 Modules</span>
-              <span><i class="far fa-clock"></i> 12 mins</span>
+              <span><i class="fas fa-film"></i> 1 Video</span>
+              <span><i class="far fa-clock"></i> 8 mins</span>
             </div>
             <div class="course-footer">
               <div class="course-price">Free</div>
-              <button class="btn btn-outline btn-course">Start Learning</button>
+              <button class="btn btn-outline btn-course">Watch Now</button>
             </div>
           </div>
         </div>
@@ -458,6 +289,35 @@
 
     </div>
   </section>
+
+
+  <div class="video-modal" id="courseVideoModal">
+    <div class="video-modal-inner">
+      <button class="video-modal-close" onclick="closeCourseVideo()"><i class="fas fa-times"></i></button>
+      <iframe id="courseVideoFrame" src="" allowfullscreen></iframe>
+      <div class="video-modal-info">
+        <div class="video-modal-name" id="courseVideoTitle" style="color:var(--white); margin-top:12px; font-size:1.2rem;"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="premium-modal" id="premiumAlertModal">
+    <div class="premium-modal-inner">
+      <button class="video-modal-close" style="top:10px; right:10px; color:var(--mid-gray);" onclick="closePremiumAlert()"><i class="fas fa-times"></i></button>
+      <div style="width:70px; height:70px; background:rgba(201,160,48,0.1); color:var(--gold); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:2rem; margin:0 auto 20px;">
+        <i class="fas fa-lock"></i>
+      </div>
+      <h3 style="color:var(--navy-dark); font-size:1.4rem; font-weight:800; margin-bottom:12px;">Premium Course Locked</h3>
+      <p id="premiumAlertText" style="color:var(--text-body); font-size:0.95rem; line-height:1.6; margin-bottom:24px;">
+        This module is part of our premium skill development program. Please login to purchase and unlock this course.
+      </p>
+      <div style="display:flex; gap:12px; justify-content:center;" id="premiumAlertActions">
+        <button class="btn btn-outline" onclick="closePremiumAlert()">Cancel</button>
+        <a href="login.html" class="btn btn-primary">Login / Register</a>
+      </div>
+    </div>
+  </div>
+
 
   <footer class="footer">
     <div class="container">
@@ -487,39 +347,139 @@
     </div>
   </footer>
 
+  <button type="button" class="scroll-top" id="scrollTop" onclick="scrollToTop()">
+    <i class="fas fa-chevron-up"></i>
+  </button>
+
   <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/lang.js"></script>
+  <script src="js/main.js"></script>
 
   <script>
-    AOS.init({ duration: 700, easing: 'ease-out-cubic', once: true, offset: 60 });
+    // --- 1. Supabase Initialization ---
+    const SUPABASE_URL = 'https://wjhbqhrzwopnmizlumyg.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndqaGJxaHJ6d29wbm1pemx1bXlnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkxODQyMDksImV4cCI6MjA5NDc2MDIwOX0.nPWyaBwX3cnioOYcXkVNLR_31AUeDjevphrtH87srgk';
+    const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    const navbar = document.getElementById('navbar');
-    window.addEventListener('scroll', () => {
-      navbar.classList.toggle('scrolled', window.scrollY > 60);
+    let isUserLoggedIn = false;
+    let isUserPremium = false;
+
+    // --- 2. Check Auth Status on Page Load ---
+    window.addEventListener('DOMContentLoaded', async () => {
+      const { data: { session } } = await db.auth.getSession();
+      
+      const navBtn = document.getElementById('navAuthBtn');
+      const mobBtn = document.getElementById('mobileAuthBtn');
+
+      if (session) {
+        isUserLoggedIn = true;
+        
+        // Change buttons to Log Out
+        if(navBtn) {
+          navBtn.innerHTML = '<i class="fas fa-sign-out-alt" style="margin-right:6px;"></i> Log Out';
+          navBtn.href = "#";
+          navBtn.onclick = handleLogout;
+        }
+        if(mobBtn) {
+          mobBtn.innerHTML = 'Log Out';
+          mobBtn.href = "#";
+          mobBtn.onclick = handleLogout;
+        }
+
+        // Check if user has premium
+        const { data: profile } = await db.from('profiles').select('is_premium').eq('id', session.user.id).single();
+        
+        if (profile && profile.is_premium) {
+          isUserPremium = true;
+          unlockPremiumUI();
+        }
+      }
     });
 
-    function toggleMobileNav() {
-      const nav  = document.getElementById('mobileNav');
-      nav.classList.toggle('open');
+    // --- 3. Log Out Logic ---
+    async function handleLogout(e) {
+      e.preventDefault();
+      await db.auth.signOut();
+      window.location.reload(); // Refresh the page to reset everything
     }
 
-    // Custom Search & Filter Logic
+    // --- 4. Unlocking the UI ---
+    function unlockPremiumUI() {
+      // Find all premium cards and remove the locks
+      const premiumCards = document.querySelectorAll('.premium-locked-card');
+      premiumCards.forEach(card => {
+        // Remove the dark hover overlay
+        const overlay = card.querySelector('.premium-lock-overlay');
+        if (overlay) overlay.remove();
+
+        // Change the center icon from Lock to Play
+        const icon = card.querySelector('.premium-lock-icon i');
+        if (icon) {
+          icon.classList.remove('fa-lock');
+          icon.classList.add('fa-play');
+        }
+
+        // Change the "Purchase" button to "Watch Now"
+        const btn = card.querySelector('.premium-btn-text');
+        if (btn) {
+          btn.innerText = 'Watch Now';
+          btn.classList.remove('btn-primary');
+          btn.classList.add('btn-outline');
+        }
+      });
+    }
+
+    // --- 5. Handle Click on Premium Course ---
+    function handlePremiumClick(cardElement, title) {
+      if (isUserPremium) {
+        // They bought it! Play the video.
+        const videoUrl = cardElement.getAttribute('data-video-url');
+        openCourseVideo(videoUrl, title);
+      } else {
+        // They don't have premium. Show the alert.
+        const alertText = document.getElementById('premiumAlertText');
+        const alertActions = document.getElementById('premiumAlertActions');
+
+        if (isUserLoggedIn) {
+          // Logged in but not premium
+          alertText.innerText = "You are logged in, but you have not been granted Premium access yet. Please contact admin to unlock your courses.";
+          alertActions.innerHTML = `<button class="btn btn-outline" onclick="closePremiumAlert()">Close</button>`;
+        } else {
+          // Not logged in at all
+          alertText.innerText = "This module is part of our premium skill development program. Please login or register to unlock this course.";
+          alertActions.innerHTML = `
+            <button class="btn btn-outline" onclick="closePremiumAlert()">Cancel</button>
+            <a href="login.html" class="btn btn-primary">Login / Register</a>`;
+        }
+
+        document.getElementById('premiumAlertModal').classList.add('open');
+        document.body.style.overflow = 'hidden';
+      }
+    }
+
+
+    // --- Generic UI Scripts ---
+    AOS.init({ duration: 700, easing: 'ease-out-cubic', once: true, offset: 60 });
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => { navbar.classList.toggle('scrolled', window.scrollY > 60); });
+    function toggleMobileNav() { document.getElementById('mobileNav').classList.toggle('open'); }
+    function scrollToTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
+
     function filterCourses() {
       const searchInput = document.getElementById('searchInput').value.toLowerCase();
       const catFilter = document.getElementById('categoryFilter').value;
       const priceFilter = document.getElementById('priceFilter').value;
       const cards = document.getElementsByClassName('filterable');
       let visibleCount = 0;
-      
       for (let i = 0; i < cards.length; i++) {
         const title = cards[i].querySelector('.course-title').innerText.toLowerCase();
         const cardCat = cards[i].getAttribute('data-category');
         const cardPrice = cards[i].getAttribute('data-price');
-        
         const matchesSearch = title.includes(searchInput);
         const matchesCat = (catFilter === 'all') || (cardCat === catFilter);
         const matchesPrice = (priceFilter === 'all') || (cardPrice === priceFilter);
-        
         if (matchesSearch && matchesCat && matchesPrice) {
           cards[i].style.display = 'flex';
           visibleCount++;
@@ -527,9 +487,29 @@
           cards[i].style.display = 'none';
         }
       }
-
       document.getElementById('noResults').style.display = visibleCount === 0 ? 'block' : 'none';
     }
+
+    function openCourseVideo(videoUrl, title) {
+      document.getElementById('courseVideoFrame').src = videoUrl + "?autoplay=1";
+      document.getElementById('courseVideoTitle').innerText = title;
+      document.getElementById('courseVideoModal').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeCourseVideo() {
+      document.getElementById('courseVideoFrame').src = "";
+      document.getElementById('courseVideoModal').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    function closePremiumAlert() {
+      document.getElementById('premiumAlertModal').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    document.getElementById('courseVideoModal').addEventListener('click', function(e) { if (e.target === this) closeCourseVideo(); });
+    document.getElementById('premiumAlertModal').addEventListener('click', function(e) { if (e.target === this) closePremiumAlert(); });
   </script>
 
 </body>
