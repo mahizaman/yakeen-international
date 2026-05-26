@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Manage Trainees | Yakeen Admin</title>
+  
+  <link rel="icon" type="image/png" href="assets/logos/yakeen-logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
+
+  <style>
+    /* Unique buttons for unlocking premium */
+    .admin-btn-unlock {
+      background: rgba(34,197,94,0.1);
+      color: #16a34a;
+      padding: 6px 14px;
+      border-radius: var(--radius-sm);
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid rgba(34,197,94,0.2);
+      transition: var(--transition);
+    }
+    .admin-btn-unlock:hover {
+      background: #16a34a;
+      color: var(--white);
+    }
+    
+    .admin-btn-revoke {
+      background: rgba(239,68,68,0.1);
+      color: #dc2626;
+      padding: 6px 14px;
+      border-radius: var(--radius-sm);
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid rgba(239,68,68,0.2);
+      transition: var(--transition);
+    }
+    .admin-btn-revoke:hover {
+      background: #dc2626;
+      color: var(--white);
+    }
+    
+    .status-badge {
+      padding: 4px 10px;
+      border-radius: 50px;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+    .status-free { background: rgba(45,45,95,0.1); color: var(--navy); }
+    .status-premium { background: linear-gradient(135deg, var(--gold), var(--gold-light)); color: var(--navy-dark); }
+  </style>
+</head>
+<body class="admin-body">
+
+  <div class="admin-layout">
+    
+    <div class="admin-sidebar">
+      <div class="admin-sidebar-logo">
+        <img src="assets/logos/yakeen-logo.png" alt="Yakeen Logo" />
+      </div>
+      <div class="admin-sidebar-label">Main Menu</div>
+      <div class="admin-nav">
+        <a href="admin-vacancies.html" class="admin-nav-item">
+          <div class="admin-nav-icon"><i class="fas fa-briefcase"></i></div>
+          Vacancies
+        </a>
+        <a href="admin-gallery.html" class="admin-nav-item">
+          <div class="admin-nav-icon"><i class="fas fa-images"></i></div>
+          Gallery
+        </a>
+        <a href="admin-students.html" class="admin-nav-item active">
+          <div class="admin-nav-icon"><i class="fas fa-user-graduate"></i></div>
+          Trainees & Access
+        </a>
+      </div>
+      <div class="admin-logout">
+        <a href="index.html" class="admin-nav-item" style="color:#ef4444;">
+          <div class="admin-nav-icon"><i class="fas fa-sign-out-alt"></i></div>
+          Back to Site
+        </a>
+      </div>
+    </div>
+
+    <div class="admin-main">
+      <div class="admin-topbar">
+        <div class="admin-topbar-title">Manage Trainees & Access</div>
+        <div class="admin-topbar-user">
+          <span>Admin</span>
+          <div class="admin-avatar">A</div>
+        </div>
+      </div>
+
+      <div class="admin-content">
+        
+        <div class="admin-table-card">
+          <div class="admin-table-header">
+            <div class="admin-table-title">Registered Workers</div>
+            <button class="btn btn-outline" style="padding: 6px 14px; font-size: 0.8rem;" onclick="loadStudents()">
+              <i class="fas fa-sync-alt"></i> Refresh
+            </button>
+          </div>
+          
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Full Name</th>
+                <th>Passport No.</th>
+                <th>Date of Birth</th>
+                <th>Access Level</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="studentsTableBody">
+              <tr>
+                <td colspan="5" style="text-align:center; padding: 40px;">
+                  <i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: var(--gold);"></i>
+                  <div style="margin-top:10px;">Loading records...</div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    // 1. Initialize Supabase
+    const SUPABASE_URL = 'https://wjhbqhrzwopnmizlumyg.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndqaGJxaHJ6d29wbm1pemx1bXlnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkxODQyMDksImV4cCI6MjA5NDc2MDIwOX0.nPWyaBwX3cnioOYcXkVNLR_31AUeDjevphrtH87srgk';
+    const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // 2. Fetch Students from the 'profiles' table
+    async function loadStudents() {
+      const tbody = document.getElementById('studentsTableBody');
+      tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:20px;"><i class="fas fa-spinner fa-spin"></i></td></tr>`;
+
+      const { data, error } = await db
+        .from('profiles')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        tbody.innerHTML = `<tr><td colspan="5" style="color:red; text-align:center;">Error loading data: ${error.message}</td></tr>`;
+        return;
+      }
+
+      if (!data || data.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color: var(--mid-gray);">No workers have completed their profile yet.</td></tr>`;
+        return;
+      }
+
+      // Render the table rows
+      tbody.innerHTML = data.map(student => {
+        const isPremium = student.is_premium;
+        const statusBadge = isPremium 
+          ? `<span class="status-badge status-premium"><i class="fas fa-star" style="font-size:0.6rem;"></i> Premium</span>` 
+          : `<span class="status-badge status-free">Free Tier</span>`;
+
+        const actionBtn = isPremium
+          ? `<button class="admin-btn-revoke" onclick="togglePremium('${student.id}', false)"><i class="fas fa-lock"></i> Revoke Premium</button>`
+          : `<button class="admin-btn-unlock" onclick="togglePremium('${student.id}', true)"><i class="fas fa-unlock"></i> Grant Premium</button>`;
+
+        return `
+          <tr>
+            <td style="font-weight:600; color:var(--navy-dark);">${escapeHtml(student.full_name || 'N/A')}</td>
+            <td>${escapeHtml(student.passport_no || 'N/A')}</td>
+            <td>${escapeHtml(student.dob || 'N/A')}</td>
+            <td>${statusBadge}</td>
+            <td>${actionBtn}</td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    // 3. Toggle Premium Status
+    async function togglePremium(userId, grantPremium) {
+      if(!confirm(`Are you sure you want to ${grantPremium ? 'GRANT' : 'REVOKE'} premium access for this user?`)) return;
+
+      const { error } = await db
+        .from('profiles')
+        .update({ is_premium: grantPremium })
+        .eq('id', userId);
+
+      if (error) {
+        alert("Error updating status: " + error.message);
+      } else {
+        // Reload table to show new status
+        loadStudents();
+      }
+    }
+
+    // Helper function to prevent HTML injection
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str).replace(/[&<>"']/g, function(match) {
+        const escapeMap = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
+        return escapeMap[match];
+      });
+    }
+
+    // Load data on page load
+    window.addEventListener('DOMContentLoaded', loadStudents);
+  </script>
+</body>
+</html>
