@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Enhance your skills with Yakeen International's video training modules for overseas workers." />
+  <title>Training & Courses | Yakeen International</title>
+
+  <link rel="icon" type="image/png" href="assets/logos/yakeen-logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
+
+  <style>
+    /* ── Course Grid Styles ── */
+    .course-filter-bar {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 40px;
+      flex-wrap: wrap;
+      background: var(--white);
+      padding: 16px;
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-sm);
+      border: 1px solid rgba(0,0,0,0.05);
+    }
+
+    .course-search {
+      flex: 1;
+      min-width: 250px;
+      position: relative;
+    }
+
+    .course-search input {
+      width: 100%;
+      padding: 12px 16px 12px 42px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--light-gray);
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.9rem;
+      transition: var(--transition);
+    }
+
+    .course-search input:focus {
+      outline: none;
+      border-color: var(--gold);
+    }
+
+    .course-search i {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--mid-gray);
+    }
+
+    .course-select {
+      padding: 12px 16px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--light-gray);
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.9rem;
+      color: var(--navy-dark);
+      background: var(--white);
+      min-width: 180px;
+      cursor: pointer;
+    }
+
+    .course-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 24px;
+    }
+
+    .course-card {
+      background: var(--white);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid rgba(0,0,0,0.05);
+      transition: var(--transition);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .course-card:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-5px);
+    }
+
+    .course-thumb {
+      width: 100%;
+      aspect-ratio: 16/9;
+      background: var(--navy-dark);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .course-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.85;
+      transition: var(--transition);
+    }
+
+    .course-card:hover .course-thumb img {
+      opacity: 1;
+      transform: scale(1.05);
+    }
+
+    .course-play-icon {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 48px;
+      height: 48px;
+      background: rgba(255,255,255,0.2);
+      backdrop-filter: blur(4px);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--white);
+      font-size: 1.2rem;
+      border: 2px solid rgba(255,255,255,0.5);
+      transition: var(--transition);
+    }
+
+    .course-card:hover .course-play-icon {
+      background: var(--gold);
+      border-color: var(--gold);
+      transform: translate(-50%, -50%) scale(1.1);
+    }
+
+    .course-badges {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      display: flex;
+      gap: 8px;
+    }
+
+    .badge-premium {
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      color: white;
+      padding: 4px 10px;
+      border-radius: 50px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+
+    .badge-free {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: white;
+      padding: 4px 10px;
+      border-radius: 50px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+
+    .course-body {
+      padding: 20px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .course-category {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+
+    .course-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--navy-dark);
+      margin-bottom: 12px;
+      line-height: 1.4;
+    }
+
+    .course-meta {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-size: 0.82rem;
+      color: var(--mid-gray);
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--light-gray);
+    }
+
+    .course-meta span {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .course-footer {
+      margin-top: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .course-price {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--navy-dark);
+    }
+
+    .btn-course {
+      padding: 8px 16px;
+      font-size: 0.85rem;
+      border-radius: var(--radius-sm);
+    }
+  </style>
+</head>
+
+<body>
+
+  <nav class="navbar" id="navbar">
+    <div class="container">
+      <a href="index.html" class="navbar-logo">
+        <img src="assets/logos/yakeen-logo.png" alt="Yakeen International" />
+      </a>
+
+      <ul class="navbar-menu">
+        <li><a href="index.html">Home</a></li>
+        
+        <li class="nav-dropdown">
+          <a href="about.html">About Us <i class="fas fa-chevron-down nav-chevron"></i></a>
+          <ul class="dropdown-menu">
+            <li><a href="about.html">Who We Are</a></li>
+            <li><a href="about.html#industries">Industries & Sectors</a></li>
+          </ul>
+        </li>
+
+        <li class="nav-dropdown">
+          <a href="services.html">Services <i class="fas fa-chevron-down nav-chevron"></i></a>
+          <ul class="dropdown-menu">
+            <li><a href="visa-tracker.html">Visa Tracker</a></li>
+            <li><a href="services.html#ami-probashi">Ami Probashi Tools</a></li>
+            <li><a href="approved-centres.html">Approved Centres</a></li>
+            <li><a href="https://yakeentravels.netlify.app/flights" target="_blank">Buy Flight Tickets <i class="fas fa-external-link-alt" style="font-size:0.7rem; margin-left:4px;"></i></a></li>
+          </ul>
+        </li>
+
+        <li><a href="vacancies.html">Vacancies</a></li>
+        <li><a href="training.html" class="active">Training</a></li>
+
+        <li class="nav-dropdown">
+          <a href="gallery.html">Gallery <i class="fas fa-chevron-down nav-chevron"></i></a>
+          <ul class="dropdown-menu">
+            <li><a href="gallery.html#photos">Office Photos</a></li>
+            <li><a href="gallery.html#testimonials">Testimonials</a></li>
+          </ul>
+        </li>
+      <li><a href="employer.html">Employer Corner</a></li>
+         <li><a href="faq.html">FAQ</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+
+      <div class="navbar-actions">
+        <div class="lang-switcher">
+          <button class="lang-btn active" onclick="switchLang('en')">EN</button>
+          <button class="lang-btn" onclick="switchLang('bn')">বাং</button>
+        </div>
+        <a href="login.html" class="btn btn-primary" style="padding: 10px 22px; font-size: 0.85rem;">
+          <i class="fas fa-user-circle" style="margin-right:6px;"></i> Login / Register
+        </a>
+        <div class="hamburger" id="hamburger" onclick="toggleMobileNav()">
+          <span></span><span></span><span></span>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="navbar-mobile" id="mobileNav">
+    <div class="lang-switcher" style="margin-bottom:16px;">
+      <button class="lang-btn active" onclick="switchLang('en')">EN</button>
+      <button class="lang-btn" onclick="switchLang('bn')">বাং</button>
+    </div>
+    
+    <a href="index.html" onclick="toggleMobileNav()">Home</a>
+    
+    <div class="mobile-nav-header">About Us</div>
+    <a href="about.html" class="mobile-sub-link" onclick="toggleMobileNav()">Who We Are</a>
+    <a href="about.html#industries" class="mobile-sub-link" onclick="toggleMobileNav()">Industries & Sectors</a>
+
+    <div class="mobile-nav-header">Services</div>
+    <a href="visa-tracker.html" class="mobile-sub-link" onclick="toggleMobileNav()">Visa Tracker</a>
+    <a href="services.html#ami-probashi" class="mobile-sub-link" onclick="toggleMobileNav()">Ami Probashi Tools</a>
+    <a href="approved-centres.html" class="mobile-sub-link" onclick="toggleMobileNav()">Approved Centres</a>
+    <a href="https://yakeentravels.netlify.app/flights" target="_blank" class="mobile-sub-link" onclick="toggleMobileNav()">Buy Flight Tickets</a>
+
+    <a href="vacancies.html" onclick="toggleMobileNav()">Vacancies</a>
+    <a href="training.html" onclick="toggleMobileNav()">Training</a>
+
+    <div class="mobile-nav-header">Gallery</div>
+    <a href="gallery.html#photos" class="mobile-sub-link" onclick="toggleMobileNav()">Office Photos</a>
+    <a href="gallery.html#testimonials" class="mobile-sub-link" onclick="toggleMobileNav()">Testimonials</a>
+
+    <a href="employer.html" onclick="toggleMobileNav()">Employer Corner</a>
+    <a href="faq.html" onclick="toggleMobileNav()">FAQ</a>
+    <a href="contact.html" onclick="toggleMobileNav()">Contact</a>
+    <a href="login.html" class="btn btn-primary" style="margin-top:12px;" onclick="toggleMobileNav()">Login / Register</a>
+  </div>
+
+  <section class="page-hero">
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="index.html">Home</a>
+        <span class="breadcrumb-sep">›</span>
+        <span>Training Modules</span>
+      </div>
+      <span class="section-tag" style="background:rgba(201,160,48,0.2);color:var(--gold-light);">Skill Development</span>
+      <h1 class="section-title" style="color:var(--white);margin-top:12px;">
+        Worker Training <span>& Preparation</span>
+      </h1>
+      <div class="gold-divider center"></div>
+      <p class="section-subtitle" style="color:rgba(255,255,255,0.7);margin:0 auto;max-width:650px;">
+        Prepare for your career abroad with our short, expert-led video modules. Learn workplace etiquette, safety protocols, and basic language skills.
+      </p>
+    </div>
+  </section>
+
+  <section class="section-padding">
+    <div class="container">
+
+      <div class="course-filter-bar" data-aos="fade-up">
+        <div class="course-search">
+          <i class="fas fa-search"></i>
+          <input type="text" id="searchInput" onkeyup="filterCourses()" placeholder="Search modules..." />
+        </div>
+        <select class="course-select" id="categoryFilter" onchange="filterCourses()">
+          <option value="all">All Categories</option>
+          <option value="Etiquette">Workplace Etiquette</option>
+          <option value="Safety">Safety & Compliance</option>
+          <option value="Language">Language Skills</option>
+          <option value="Technical">Technical Skills</option>
+        </select>
+        <select class="course-select" id="priceFilter" onchange="filterCourses()">
+          <option value="all">Any Price</option>
+          <option value="free">Free Courses</option>
+          <option value="premium">Premium (Paid)</option>
+        </select>
+      </div>
+
+      <div class="course-grid" id="courseContainer">
+        
+        <div class="course-card filterable" data-category="Etiquette" data-price="free" data-aos="fade-up" data-aos-delay="0">
+          <div class="course-thumb">
+            <img src="https://images.unsplash.com/photo-1584515933487-779824d29309?auto=format&fit=crop&q=80&w=800" alt="Personal Hygiene" />
+            <div class="course-badges">
+              <span class="badge-free">Free</span>
+            </div>
+            <div class="course-play-icon"><i class="fas fa-play"></i></div>
+          </div>
+          <div class="course-body">
+            <div class="course-category">Workplace Etiquette</div>
+            <div class="course-title">ব্যক্তিগত ও কর্মক্ষেত্রের পরিচ্ছন্নতা (Personal Hygiene)</div>
+            <div class="course-meta">
+              <span><i class="fas fa-film"></i> 5 Modules</span>
+              <span><i class="far fa-clock"></i> 10 mins</span>
+            </div>
+            <div class="course-footer">
+              <div class="course-price">Free</div>
+              <button class="btn btn-outline btn-course">Start Learning</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="course-card filterable" data-category="Language" data-price="premium" data-aos="fade-up" data-aos-delay="100">
+          <div class="course-thumb">
+            <img src="https://images.unsplash.com/photo-1543269865-cbf427effbad?auto=format&fit=crop&q=80&w=800" alt="Arabic Language" />
+            <div class="course-badges">
+              <span class="badge-premium"><i class="fas fa-star" style="font-size:0.6rem;margin-right:4px;"></i>Premium</span>
+            </div>
+            <div class="course-play-icon"><i class="fas fa-play"></i></div>
+          </div>
+          <div class="course-body">
+            <div class="course-category">Language Skills</div>
+            <div class="course-title">Basic Arabic for Construction Workers Part-1</div>
+            <div class="course-meta">
+              <span><i class="fas fa-film"></i> 10 Modules</span>
+              <span><i class="far fa-clock"></i> 25 mins</span>
+            </div>
+            <div class="course-footer">
+              <div class="course-price">৳ 500</div>
+              <button class="btn btn-primary btn-course">Unlock Course</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="course-card filterable" data-category="Technical" data-price="premium" data-aos="fade-up" data-aos-delay="200">
+          <div class="course-thumb">
+            <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&q=80&w=800" alt="Load Unload" />
+            <div class="course-badges">
+              <span class="badge-premium"><i class="fas fa-star" style="font-size:0.6rem;margin-right:4px;"></i>Premium</span>
+            </div>
+            <div class="course-play-icon"><i class="fas fa-play"></i></div>
+          </div>
+          <div class="course-body">
+            <div class="course-category">Technical Skills</div>
+            <div class="course-title">বিদেশগামী লোড-আনলোড শ্রমিক প্রশিক্ষণ</div>
+            <div class="course-meta">
+              <span><i class="fas fa-film"></i> 8 Modules</span>
+              <span><i class="far fa-clock"></i> 15 mins</span>
+            </div>
+            <div class="course-footer">
+              <div class="course-price">৳ 300</div>
+              <button class="btn btn-primary btn-course">Unlock Course</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="course-card filterable" data-category="Safety" data-price="free" data-aos="fade-up" data-aos-delay="300">
+          <div class="course-thumb">
+            <img src="https://images.unsplash.com/photo-1541888081696-61cb7e428489?auto=format&fit=crop&q=80&w=800" alt="Safety" />
+            <div class="course-badges">
+              <span class="badge-free">Free</span>
+            </div>
+            <div class="course-play-icon"><i class="fas fa-play"></i></div>
+          </div>
+          <div class="course-body">
+            <div class="course-category">Safety & Compliance</div>
+            <div class="course-title">Site Safety & Hazard Awareness (কর্মক্ষেত্রে নিরাপত্তা)</div>
+            <div class="course-meta">
+              <span><i class="fas fa-film"></i> 6 Modules</span>
+              <span><i class="far fa-clock"></i> 12 mins</span>
+            </div>
+            <div class="course-footer">
+              <div class="course-price">Free</div>
+              <button class="btn btn-outline btn-course">Start Learning</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      
+      <div id="noResults" style="display:none; text-align:center; padding: 40px; color: var(--mid-gray);">
+        <i class="fas fa-search" style="font-size: 2rem; margin-bottom: 12px; color: var(--light-gray);"></i>
+        <h3>No courses found</h3>
+        <p>Try adjusting your search or filters.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <img src="assets/logos/yakeen-logo.png" alt="Yakeen International" class="footer-logo" />
+          <p class="footer-brand-desc">
+            A trusted overseas manpower recruitment agency committed to ethical,
+            transparent, and legal placement of Bangladeshi workers worldwide.
+          </p>
+        </div>
+        <div>
+          <h4 class="footer-col-title">Quick Links</h4>
+          <ul class="footer-links">
+            <li><a href="vacancies.html">Current Vacancies</a></li>
+            <li><a href="training.html">Training Modules</a></li>
+            <li><a href="visa-tracker.html">Visa Tracker</a></li>
+            <li><a href="approved-centres.html">Approved Centres</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <div class="footer-bottom-text">
+          © 2025 <span>Yakeen International</span>. All rights reserved. Nurturing Global Talent.
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+  <script>
+    AOS.init({ duration: 700, easing: 'ease-out-cubic', once: true, offset: 60 });
+
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 60);
+    });
+
+    function toggleMobileNav() {
+      const nav  = document.getElementById('mobileNav');
+      nav.classList.toggle('open');
+    }
+
+    // Custom Search & Filter Logic
+    function filterCourses() {
+      const searchInput = document.getElementById('searchInput').value.toLowerCase();
+      const catFilter = document.getElementById('categoryFilter').value;
+      const priceFilter = document.getElementById('priceFilter').value;
+      const cards = document.getElementsByClassName('filterable');
+      let visibleCount = 0;
+      
+      for (let i = 0; i < cards.length; i++) {
+        const title = cards[i].querySelector('.course-title').innerText.toLowerCase();
+        const cardCat = cards[i].getAttribute('data-category');
+        const cardPrice = cards[i].getAttribute('data-price');
+        
+        const matchesSearch = title.includes(searchInput);
+        const matchesCat = (catFilter === 'all') || (cardCat === catFilter);
+        const matchesPrice = (priceFilter === 'all') || (cardPrice === priceFilter);
+        
+        if (matchesSearch && matchesCat && matchesPrice) {
+          cards[i].style.display = 'flex';
+          visibleCount++;
+        } else {
+          cards[i].style.display = 'none';
+        }
+      }
+
+      document.getElementById('noResults').style.display = visibleCount === 0 ? 'block' : 'none';
+    }
+  </script>
+
+</body>
+</html>
