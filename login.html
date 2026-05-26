@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login & Registration | Yakeen International</title>
+
+  <link rel="icon" type="image/png" href="assets/logos/yakeen-logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
+
+  <style>
+    .auth-page {
+      min-height: 100vh;
+      background: linear-gradient(135deg, var(--navy-dark), #1a1a3e);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 120px 24px 60px;
+    }
+
+    .auth-container {
+      background: var(--white);
+      width: 100%;
+      max-width: 480px;
+      border-radius: var(--radius-lg);
+      padding: 48px 40px;
+      box-shadow: var(--shadow-lg);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .auth-header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .auth-icon {
+      width: 64px;
+      height: 64px;
+      background: rgba(201,160,48,0.15);
+      color: var(--gold);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      margin: 0 auto 16px;
+    }
+
+    .auth-title {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--navy-dark);
+      margin-bottom: 8px;
+    }
+
+    .auth-subtitle {
+      font-size: 0.9rem;
+      color: var(--mid-gray);
+    }
+
+    .auth-tabs {
+      display: flex;
+      border-bottom: 2px solid var(--light-gray);
+      margin-bottom: 24px;
+    }
+
+    .auth-tab {
+      flex: 1;
+      text-align: center;
+      padding: 12px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--mid-gray);
+      cursor: pointer;
+      position: relative;
+      transition: var(--transition);
+    }
+
+    .auth-tab.active {
+      color: var(--gold);
+    }
+
+    .auth-tab.active::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: var(--gold);
+    }
+
+    /* Form specific overrides */
+    .auth-form-group { margin-bottom: 20px; }
+    .auth-label { display: block; font-size: 0.85rem; font-weight: 600; color: var(--navy-dark); margin-bottom: 8px; }
+    .auth-input { width: 100%; padding: 14px 18px; border: 2px solid var(--light-gray); border-radius: var(--radius-sm); font-size: 0.95rem; font-family: 'Poppins', sans-serif; transition: var(--transition); background: var(--off-white); }
+    .auth-input:focus { border-color: var(--gold); background: var(--white); box-shadow: 0 0 0 4px rgba(201,160,48,0.1); outline: none; }
+    
+    .auth-btn { width: 100%; justify-content: center; padding: 16px; font-size: 1rem; margin-top: 12px; }
+
+    /* The views */
+    #loginView, #registerView, #profileSetupView, #loadingView { display: none; }
+    #loginView.active, #registerView.active, #profileSetupView.active, #loadingView.active { display: block; animation: fadeIn 0.4s ease; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .error-msg {
+      background: rgba(239, 68, 68, 0.1);
+      color: #dc2626;
+      padding: 12px;
+      border-radius: var(--radius-sm);
+      font-size: 0.85rem;
+      margin-bottom: 20px;
+      display: none;
+      text-align: center;
+      border: 1px solid rgba(239, 68, 68, 0.2);
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar" id="navbar">
+    <div class="container">
+      <a href="index.html" class="navbar-logo">
+        <img src="assets/logos/yakeen-logo.png" alt="Yakeen International" />
+      </a>
+      <ul class="navbar-menu">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="training.html">Training</a></li>
+      </ul>
+      <div class="navbar-actions">
+        <a href="index.html" class="btn btn-outline" style="padding: 8px 20px; font-size: 0.85rem;">
+          <i class="fas fa-arrow-left"></i> Back to Site
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="auth-page">
+    <div class="auth-container">
+      
+      <div id="loadingView" class="active" style="text-align:center; padding: 40px 0;">
+        <i class="fas fa-spinner fa-spin" style="font-size: 3rem; color: var(--gold); margin-bottom: 16px;"></i>
+        <h3 style="color: var(--navy-dark);">Checking session...</h3>
+      </div>
+
+      <div id="loginView">
+        <div class="auth-header">
+          <div class="auth-icon"><i class="fas fa-user-lock"></i></div>
+          <h1 class="auth-title">Welcome Back</h1>
+          <p class="auth-subtitle">Login to access your training modules</p>
+        </div>
+        
+        <div class="auth-tabs">
+          <div class="auth-tab active" onclick="switchTab('login')">Login</div>
+          <div class="auth-tab" onclick="switchTab('register')">Register</div>
+        </div>
+
+        <div id="loginError" class="error-msg"></div>
+
+        <form id="loginForm" onsubmit="handleLogin(event)">
+          <div class="auth-form-group">
+            <label class="auth-label">Email Address</label>
+            <input type="email" id="loginEmail" class="auth-input" placeholder="Enter your email" required />
+          </div>
+          <div class="auth-form-group">
+            <label class="auth-label">Password</label>
+            <input type="password" id="loginPassword" class="auth-input" placeholder="Enter your password" required />
+          </div>
+          <button type="submit" class="btn btn-primary auth-btn" id="loginBtn">Login to Account</button>
+        </form>
+      </div>
+
+      <div id="registerView">
+        <div class="auth-header">
+          <div class="auth-icon"><i class="fas fa-user-plus"></i></div>
+          <h1 class="auth-title">Create Account</h1>
+          <p class="auth-subtitle">Start your journey with Yakeen International</p>
+        </div>
+        
+        <div class="auth-tabs">
+          <div class="auth-tab" onclick="switchTab('login')">Login</div>
+          <div class="auth-tab active" onclick="switchTab('register')">Register</div>
+        </div>
+
+        <div id="regError" class="error-msg"></div>
+
+        <form id="registerForm" onsubmit="handleRegister(event)">
+          <div class="auth-form-group">
+            <label class="auth-label">Email Address</label>
+            <input type="email" id="regEmail" class="auth-input" placeholder="Enter your email" required />
+          </div>
+          <div class="auth-form-group">
+            <label class="auth-label">Password</label>
+            <input type="password" id="regPassword" class="auth-input" placeholder="Create a password (min 6 chars)" required minlength="6" />
+          </div>
+          <button type="submit" class="btn btn-primary auth-btn" id="regBtn">Create Account</button>
+        </form>
+      </div>
+
+      <div id="profileSetupView">
+        <div class="auth-header">
+          <div class="auth-icon" style="background: rgba(34,197,94,0.15); color: #16a34a;"><i class="fas fa-id-card"></i></div>
+          <h1 class="auth-title">Complete Profile</h1>
+          <p class="auth-subtitle" style="color:#dc2626; font-weight:600; font-size:0.85rem; margin-top:8px;">
+            <i class="fas fa-info-circle"></i> Mandatory for Course Certificates
+          </p>
+          <p style="font-size:0.85rem; color:var(--text-body); margin-top:8px;">
+            Please enter your details exactly as they appear on your passport. This will be printed on your final training certificates.
+          </p>
+        </div>
+
+        <div id="profileError" class="error-msg"></div>
+
+        <form id="profileForm" onsubmit="handleProfileSetup(event)">
+          <div class="auth-form-group">
+            <label class="auth-label">Full Legal Name</label>
+            <input type="text" id="profName" class="auth-input" placeholder="e.g. MD ABDUR RAHMAN" required />
+          </div>
+          <div class="auth-form-group">
+            <label class="auth-label">Date of Birth</label>
+            <input type="date" id="profDOB" class="auth-input" required />
+          </div>
+          <div class="auth-form-group">
+            <label class="auth-label">Passport Number</label>
+            <input type="text" id="profPassport" class="auth-input" placeholder="e.g. A00000000" required style="text-transform: uppercase;" />
+          </div>
+          <button type="submit" class="btn btn-navy auth-btn" id="profBtn">Save & Start Training</button>
+        </form>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    // 1. Initialize Supabase
+    const SUPABASE_URL = 'https://wjhbqhrzwopnmizlumyg.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndqaGJxaHJ6d29wbm1pemx1bXlnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkxODQyMDksImV4cCI6MjA5NDc2MDIwOX0.nPWyaBwX3cnioOYcXkVNLR_31AUeDjevphrtH87srgk';
+    const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // Global variable to hold user ID
+    let currentUserId = null;
+
+    // 2. Check Auth State on Load
+    window.addEventListener('DOMContentLoaded', async () => {
+      const { data: { session } } = await db.auth.getSession();
+      
+      if (session) {
+        currentUserId = session.user.id;
+        checkProfileStatus(session.user.id);
+      } else {
+        showView('loginView');
+      }
+    });
+
+    // View Switcher Utility
+    function showView(viewId) {
+      document.getElementById('loadingView').classList.remove('active');
+      document.getElementById('loginView').classList.remove('active');
+      document.getElementById('registerView').classList.remove('active');
+      document.getElementById('profileSetupView').classList.remove('active');
+      document.getElementById(viewId).classList.add('active');
+    }
+
+    function switchTab(tab) {
+      if (tab === 'login') showView('loginView');
+      if (tab === 'register') showView('registerView');
+    }
+
+    // Show Error Utility
+    function showError(elementId, message) {
+      const el = document.getElementById(elementId);
+      el.textContent = message;
+      el.style.display = 'block';
+    }
+
+    // 3. Handle Login
+    async function handleLogin(e) {
+      e.preventDefault();
+      document.getElementById('loginError').style.display = 'none';
+      const btn = document.getElementById('loginBtn');
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Logging in...';
+      btn.disabled = true;
+
+      const email = document.getElementById('loginEmail').value;
+      const password = document.getElementById('loginPassword').value;
+
+      const { data, error } = await db.auth.signInWithPassword({ email, password });
+
+      if (error) {
+        showError('loginError', error.message);
+        btn.innerHTML = 'Login to Account';
+        btn.disabled = false;
+      } else {
+        currentUserId = data.user.id;
+        checkProfileStatus(data.user.id);
+      }
+    }
+
+    // 4. Handle Registration
+    async function handleRegister(e) {
+      e.preventDefault();
+      document.getElementById('regError').style.display = 'none';
+      const btn = document.getElementById('regBtn');
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating Account...';
+      btn.disabled = true;
+
+      const email = document.getElementById('regEmail').value;
+      const password = document.getElementById('regPassword').value;
+
+      const { data, error } = await db.auth.signUp({ email, password });
+
+      if (error) {
+        showError('regError', error.message);
+        btn.innerHTML = 'Create Account';
+        btn.disabled = false;
+      } else {
+        // Automatically sign them in if Supabase auto-confirms, then check profile
+        if (data.session) {
+          currentUserId = data.user.id;
+          checkProfileStatus(data.user.id);
+        } else {
+          // If email confirmation is required by your Supabase settings
+          showError('regError', 'Please check your email to verify your account.');
+          btn.innerHTML = 'Create Account';
+          btn.disabled = false;
+        }
+      }
+    }
+
+    // 5. Check if User Profile Exists
+    async function checkProfileStatus(userId) {
+      showView('loadingView');
+      
+      const { data, error } = await db
+        .from('profiles')
+        .select('*')
+        .eq('id', userId)
+        .single();
+
+      if (data && data.full_name && data.passport_no) {
+        // Profile is complete! Send them to the training page
+        window.location.href = 'training.html';
+      } else {
+        // Profile is missing or incomplete, show the mandatory form
+        showView('profileSetupView');
+      }
+    }
+
+    // 6. Handle Profile Setup Saving
+    async function handleProfileSetup(e) {
+      e.preventDefault();
+      document.getElementById('profileError').style.display = 'none';
+      const btn = document.getElementById('profBtn');
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving Details...';
+      btn.disabled = true;
+
+      const full_name = document.getElementById('profName').value.toUpperCase();
+      const dob = document.getElementById('profDOB').value;
+      const passport_no = document.getElementById('profPassport').value.toUpperCase();
+
+      const { error } = await db
+        .from('profiles')
+        .upsert({ 
+          id: currentUserId, 
+          full_name: full_name, 
+          dob: dob, 
+          passport_no: passport_no 
+        });
+
+      if (error) {
+        showError('profileError', error.message);
+        btn.innerHTML = 'Save & Start Training';
+        btn.disabled = false;
+      } else {
+        // Successfully saved profile! Off to training.
+        window.location.href = 'training.html';
+      }
+    }
+  </script>
+</body>
+</html>
