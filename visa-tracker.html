@@ -357,7 +357,7 @@
   <!-- ============================================
        NAVBAR
   ============================================ -->
- <nav class="navbar" id="navbar">
+<nav class="navbar" id="navbar">
     <div class="container">
       <a href="index.html" class="navbar-logo">
         <img src="assets/logos/yakeen-logo.png" alt="Yakeen International" />
@@ -394,7 +394,9 @@
             <li><a href="gallery.html#testimonials">Testimonials</a></li>
           </ul>
         </li>
-         <li><a href="faq.html">FAQ</a></li>
+        
+        <li><a href="employer.html">Employer Corner</a></li>
+        <li><a href="faq.html">FAQ</a></li>
         <li><a href="contact.html">Contact</a></li>
       </ul>
 
@@ -402,10 +404,14 @@
         <div class="lang-switcher">
           <button class="lang-btn active" onclick="switchLang('en')">EN</button>
           <button class="lang-btn" onclick="switchLang('bn')">বাং</button>
+          <button class="lang-btn" onclick="switchLang('hi')">हिं</button>
+          <button class="lang-btn" onclick="switchLang('ar')">عر</button>
         </div>
-        <a href="login.html" class="btn btn-primary" style="padding: 10px 22px; font-size: 0.85rem;">
+        
+        <a href="login.html" id="navAuthBtn" class="btn btn-primary" style="padding: 10px 22px; font-size: 0.85rem;">
           <i class="fas fa-user-circle" style="margin-right:6px;"></i> Login / Register
         </a>
+        
         <div class="hamburger" id="hamburger" onclick="toggleMobileNav()">
           <span></span><span></span><span></span>
         </div>
@@ -417,6 +423,8 @@
     <div class="lang-switcher" style="margin-bottom:16px;">
       <button class="lang-btn active" onclick="switchLang('en')">EN</button>
       <button class="lang-btn" onclick="switchLang('bn')">বাং</button>
+      <button class="lang-btn" onclick="switchLang('hi')">हिं</button>
+      <button class="lang-btn" onclick="switchLang('ar')">عر</button>
     </div>
     
     <a href="index.html" onclick="toggleMobileNav()">Home</a>
@@ -437,11 +445,13 @@
     <div class="mobile-nav-header">Gallery</div>
     <a href="gallery.html#photos" class="mobile-sub-link" onclick="toggleMobileNav()">Office Photos</a>
     <a href="gallery.html#testimonials" class="mobile-sub-link" onclick="toggleMobileNav()">Testimonials</a>
-
+    
+    <a href="employer.html" onclick="toggleMobileNav()">Employer Corner</a>
+    <a href="faq.html" onclick="toggleMobileNav()">FAQ</a>
     <a href="contact.html" onclick="toggleMobileNav()">Contact</a>
-    <a href="login.html" class="btn btn-primary" style="margin-top:12px;" onclick="toggleMobileNav()">Login / Register</a>
+    
+    <a href="login.html" id="mobileAuthBtn" class="btn btn-primary" style="margin-top:12px;" onclick="toggleMobileNav()">Login / Register</a>
   </div>
-
 
   <!-- ============================================
        PAGE HERO
