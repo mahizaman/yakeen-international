@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Yakeen International Gallery — office photos, worker deployments, and more." />
-  <title>Gallery | Yakeen International</title>
+  <meta name="description" content="Yakeen International Media — Office photos, worker deployments, and real video success stories." />
+  <title>Gallery & Stories | Yakeen International</title>
 
   <link rel="icon" type="image/png" href="assets/logos/yakeen-logo.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -15,37 +15,56 @@
   <link rel="stylesheet" href="css/style.css" />
 
   <style>
-    /* ── Gallery specific styles ── */
-    .gallery-filters {
+    /* ── Tab Switcher Styles ── */
+    .media-tabs-wrapper {
       display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
       justify-content: center;
+      gap: 16px;
       margin-bottom: 40px;
+      flex-wrap: wrap;
     }
 
-    .gallery-filter-btn {
-      padding: 8px 22px;
+    .media-tab-btn {
+      padding: 14px 36px;
       border-radius: 50px;
-      border: 2px solid var(--light-gray);
       background: var(--white);
-      font-size: 0.85rem;
+      border: 2px solid var(--light-gray);
+      color: var(--mid-gray);
       font-weight: 600;
-      color: var(--text-body);
-      cursor: pointer;
       font-family: 'Poppins', sans-serif;
+      cursor: pointer;
       transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.05rem;
+      box-shadow: var(--shadow-sm);
     }
 
-    .gallery-filter-btn:hover,
-    .gallery-filter-btn.active {
+    .media-tab-btn:hover {
+      border-color: var(--gold);
+      color: var(--navy-dark);
+      transform: translateY(-2px);
+    }
+
+    .media-tab-btn.active {
       background: linear-gradient(135deg, var(--gold), var(--gold-light));
       border-color: var(--gold);
       color: var(--navy-dark);
-      box-shadow: var(--shadow-gold);
+      box-shadow: var(--shadow-md);
     }
 
-    /* Masonry grid */
+    .media-tab-content {
+      display: none;
+      animation: fadeIn 0.5s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── Photos Masonry ── */
     .gallery-masonry {
       columns: 3;
       column-gap: 20px;
@@ -62,22 +81,13 @@
       transition: var(--transition);
     }
 
-    .gallery-item:hover {
-      box-shadow: var(--shadow-lg);
-    }
-
-    .gallery-item img {
-      width: 100%;
-      display: block;
-      transition: var(--transition-slow);
-    }
-
+    .gallery-item:hover { box-shadow: var(--shadow-lg); }
+    .gallery-item img { width: 100%; display: block; transition: var(--transition-slow); }
+    
     .gallery-item-overlay {
       position: absolute;
       inset: 0;
-      background: linear-gradient(135deg,
-        rgba(45,45,95,0.7),
-        rgba(201,160,48,0.5));
+      background: linear-gradient(135deg, rgba(45,45,95,0.7), rgba(201,160,48,0.5));
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -88,16 +98,10 @@
       padding: 16px;
     }
 
-    .gallery-item:hover img           { transform: scale(1.06); }
+    .gallery-item:hover img { transform: scale(1.06); }
     .gallery-item:hover .gallery-item-overlay { opacity: 1; }
 
-    .gallery-zoom-icon {
-      color: var(--white);
-      font-size: 1.8rem;
-      transform: scale(0.7);
-      transition: var(--transition);
-    }
-
+    .gallery-zoom-icon { color: var(--white); font-size: 1.8rem; transform: scale(0.7); transition: var(--transition); }
     .gallery-item:hover .gallery-zoom-icon { transform: scale(1); }
 
     .gallery-caption {
@@ -109,135 +113,113 @@
       transform: translateY(6px);
       transition: var(--transition);
     }
-
     .gallery-item:hover .gallery-caption { transform: translateY(0); }
 
-    /* Lightbox */
-    .lightbox {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.95);
-      z-index: 9999;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-    }
+    /* ── Testimonials Grid ── */
+    .testimonials-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
 
-    .lightbox.open { display: flex; }
-
-    .lightbox-inner {
-      position: relative;
-      max-width: 90vw;
-      max-height: 90vh;
+    .testimonial-full-card {
+      background: var(--white);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid rgba(0,0,0,0.06);
+      transition: var(--transition);
       display: flex;
       flex-direction: column;
-      align-items: center;
-      gap: 16px;
     }
 
-    .lightbox-inner img {
-      max-width: 90vw;
-      max-height: 80vh;
-      object-fit: contain;
-      border-radius: var(--radius-md);
-      box-shadow: var(--shadow-lg);
+    .testimonial-full-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); border-color: rgba(201,160,48,0.25); }
+
+    .t-thumb { position: relative; aspect-ratio: 16/9; background: var(--navy-dark); overflow: hidden; cursor: pointer; flex-shrink: 0; }
+    .t-thumb img { width: 100%; height: 100%; object-fit: cover; opacity: 0.85; transition: var(--transition-slow); }
+    .testimonial-full-card:hover .t-thumb img { opacity: 0.6; transform: scale(1.05); }
+
+    .t-play { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
+    .t-play-btn {
+      width: 64px; height: 64px; background: rgba(201,160,48,0.9); border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem; color: var(--navy-dark); box-shadow: 0 0 0 12px rgba(201,160,48,0.2); transition: var(--transition);
+    }
+    .testimonial-full-card:hover .t-play-btn { transform: scale(1.12); box-shadow: 0 0 0 20px rgba(201,160,48,0.12); }
+
+    .t-country-badge {
+      position: absolute; top: 12px; right: 12px; background: rgba(26,26,46,0.85); color: var(--white); font-size: 0.78rem;
+      font-weight: 600; padding: 4px 12px; border-radius: 50px; backdrop-filter: blur(4px); border: 1px solid rgba(201,160,48,0.3);
+      display: flex; align-items: center; gap: 6px;
     }
 
-    .lightbox-caption {
-      color: rgba(255,255,255,0.8);
-      font-size: 0.9rem;
-      text-align: center;
-    }
+    .t-body { padding: 22px; flex: 1; display: flex; flex-direction: column; gap: 10px; }
+    .t-worker-row { display: flex; align-items: center; gap: 12px; }
+    .t-avatar { width: 44px; height: 44px; background: linear-gradient(135deg, var(--navy), var(--navy-light)); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1rem; color: var(--gold-light); font-weight: 700; flex-shrink: 0; border: 2px solid rgba(201,160,48,0.2); }
+    .t-worker-name { font-size: 1rem; font-weight: 700; color: var(--navy-dark); line-height: 1.2; }
+    .t-worker-meta { font-size: 0.8rem; color: var(--mid-gray); margin-top: 2px; }
+    .t-divider { height: 1px; background: var(--light-gray); }
 
-    .lightbox-close {
-      position: fixed;
-      top: 20px;
-      right: 24px;
-      background: rgba(255,255,255,0.1);
-      border: none;
-      color: var(--white);
-      font-size: 1.6rem;
-      cursor: pointer;
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: var(--transition);
-      z-index: 10000;
+    .t-watch-btn {
+      display: flex; align-items: center; justify-content: center; gap: 8px; padding: 11px; background: rgba(201,160,48,0.08);
+      border: 1px solid rgba(201,160,48,0.2); border-radius: var(--radius-sm); color: var(--gold-dark); font-size: 0.85rem;
+      font-weight: 600; cursor: pointer; transition: var(--transition); margin-top: auto;
     }
+    .t-watch-btn:hover { background: linear-gradient(135deg, var(--gold), var(--gold-light)); color: var(--navy-dark); border-color: var(--gold); }
 
-    .lightbox-close:hover {
-      background: var(--gold);
-      color: var(--navy-dark);
+    /* ── Lightbox & Modals ── */
+    .lightbox, .video-modal {
+      display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 9999;
+      align-items: center; justify-content: center; padding: 20px;
     }
+    .lightbox.open, .video-modal.open { display: flex; }
+
+    .lightbox-inner, .video-modal-inner { position: relative; max-width: 90vw; max-height: 90vh; display: flex; flex-direction: column; align-items: center; gap: 16px; width: 100%; }
+    .video-modal-inner { max-width: 900px; }
+
+    .lightbox-inner img { max-width: 90vw; max-height: 80vh; object-fit: contain; border-radius: var(--radius-md); box-shadow: var(--shadow-lg); }
+    .video-modal iframe { width: 100%; aspect-ratio: 16/9; border-radius: var(--radius-md); border: none; box-shadow: var(--shadow-lg); }
+
+    .lightbox-close, .video-modal-close {
+      position: absolute; top: 20px; right: 24px; background: rgba(255,255,255,0.1); border: none; color: var(--white); font-size: 1.6rem;
+      cursor: pointer; width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: var(--transition); z-index: 10000;
+    }
+    .video-modal-close { top: -52px; right: 0; }
+    .lightbox-close:hover, .video-modal-close:hover { background: var(--gold); color: var(--navy-dark); }
 
     .lightbox-nav {
-      position: fixed;
-      top: 50%;
-      transform: translateY(-50%);
-      background: rgba(255,255,255,0.1);
-      border: none;
-      color: var(--white);
-      font-size: 1.4rem;
-      cursor: pointer;
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: var(--transition);
-      z-index: 10000;
+      position: fixed; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.1); border: none; color: var(--white); font-size: 1.4rem;
+      cursor: pointer; width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: var(--transition); z-index: 10000;
     }
-
-    .lightbox-nav:hover {
-      background: var(--gold);
-      color: var(--navy-dark);
-    }
-
+    .lightbox-nav:hover { background: var(--gold); color: var(--navy-dark); }
     .lightbox-prev { left: 16px; }
     .lightbox-next { right: 16px; }
 
-    .lightbox-counter {
-      position: fixed;
-      bottom: 24px;
-      left: 50%;
-      transform: translateX(-50%);
-      color: rgba(255,255,255,0.5);
-      font-size: 0.82rem;
-    }
+    .lightbox-caption, .video-modal-meta { color: rgba(255,255,255,0.8); font-size: 0.9rem; text-align: center; margin-top:4px;}
+    .video-modal-name { font-size: 1.1rem; font-weight: 700; color: var(--white); text-align: center; }
 
-    /* Loading skeleton */
-    .gallery-skeleton {
-      break-inside: avoid;
-      margin-bottom: 20px;
-      border-radius: var(--radius-md);
-      background: var(--light-gray);
-      animation: shimmer 1.5s ease infinite;
+    /* ── Utilities ── */
+    .stats-banner {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; background: linear-gradient(135deg, var(--navy-dark), #1a1a3e);
+      border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-lg); margin-bottom: 40px;
     }
+    .stats-banner-item { padding: 32px 24px; text-align: center; border-right: 1px solid rgba(255,255,255,0.08); transition: var(--transition); }
+    .stats-banner-item:last-child { border-right: none; }
+    .stats-banner-item:hover { background: rgba(201,160,48,0.08); }
+    .stats-banner-num { font-size: 2rem; font-weight: 800; color: var(--gold); line-height: 1; margin-bottom: 6px; }
+    .stats-banner-label { font-size: 0.82rem; color: rgba(255,255,255,0.6); }
 
-    @keyframes shimmer {
-      0%, 100% { opacity: 0.5; }
-      50%       { opacity: 1;   }
-    }
+    .media-skeleton { background: var(--light-gray); border-radius: var(--radius-md); animation: shimmer 1.5s ease infinite; }
+    .empty-state { text-align: center; padding: 80px 20px; grid-column: 1 / -1; }
 
-    /* Empty state */
-    .gallery-empty {
-      grid-column: 1 / -1;
-      text-align: center;
-      padding: 80px 20px;
-    }
+    @keyframes shimmer { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
 
     @media (max-width: 1024px) {
       .gallery-masonry { columns: 2; }
+      .testimonials-grid { grid-template-columns: repeat(2, 1fr); }
+      .stats-banner { grid-template-columns: repeat(2, 1fr); }
+      .stats-banner-item:nth-child(2) { border-right: none; }
+      .stats-banner-item:nth-child(3) { border-top: 1px solid rgba(255,255,255,0.08); }
     }
-
-    @media (max-width: 600px) {
+    @media (max-width: 640px) {
       .gallery-masonry { columns: 1; }
-      .lightbox-nav    { display: none; }
+      .testimonials-grid { grid-template-columns: 1fr; }
+      .lightbox-nav { display: none; }
     }
   </style>
 </head>
@@ -249,28 +231,49 @@
       <a href="index.html" class="navbar-logo">
         <img src="assets/logos/yakeen-logo.png" alt="Yakeen International" />
       </a>
+
       <ul class="navbar-menu">
         <li><a href="index.html">Home</a></li>
-        <li><a href="about.html">About Us</a></li>
-        <li><a href="services.html">Services</a></li>
+        
+        <li class="nav-dropdown">
+          <a href="about.html">About Us <i class="fas fa-chevron-down nav-chevron"></i></a>
+          <ul class="dropdown-menu">
+            <li><a href="about.html">Who We Are</a></li>
+            <li><a href="about.html#industries">Industries & Sectors</a></li>
+          </ul>
+        </li>
+
+        <li class="nav-dropdown">
+          <a href="services.html">Services <i class="fas fa-chevron-down nav-chevron"></i></a>
+          <ul class="dropdown-menu">
+            <li><a href="visa-tracker.html">Visa Tracker</a></li>
+            <li><a href="services.html#ami-probashi">Ami Probashi Tools</a></li>
+            <li><a href="approved-centres.html">Approved Centres</a></li>
+            <li><a href="https://yakeentravels.netlify.app/flights" target="_blank">Buy Flight Tickets <i class="fas fa-external-link-alt" style="font-size:0.7rem; margin-left:4px;"></i></a></li>
+          </ul>
+        </li>
+
         <li><a href="vacancies.html">Vacancies</a></li>
-        <li><a href="visa-tracker.html">Visa Tracker</a></li>
-        <li><a href="approved-centres.html">Approved Centres</a></li> 
-        <li><a href="gallery.html" class="active">Gallery</a></li>
-        <li><a href="testimonials.html">Testimonials</a></li>
-        <li><a href="employer.html">Employers</a></li>
-        <li><a href="faq.html">FAQ</a></li>
+        <li><a href="training.html">Training</a></li>
+
+        <li class="nav-dropdown">
+          <a href="gallery.html" class="active">Gallery <i class="fas fa-chevron-down nav-chevron"></i></a>
+          <ul class="dropdown-menu">
+            <li><a href="gallery.html#photos" onclick="switchMediaTab('photos')">Office Photos</a></li>
+            <li><a href="gallery.html#testimonials" onclick="switchMediaTab('testimonials')">Testimonials</a></li>
+          </ul>
+        </li>
+
         <li><a href="contact.html">Contact</a></li>
       </ul>
+
       <div class="navbar-actions">
         <div class="lang-switcher">
           <button class="lang-btn active" onclick="switchLang('en')">EN</button>
           <button class="lang-btn" onclick="switchLang('bn')">বাং</button>
-          <button class="lang-btn" onclick="switchLang('hi')">हिं</button>
-          <button class="lang-btn" onclick="switchLang('ar')">عر</button>
         </div>
-        <a href="contact.html" class="btn btn-primary" style="padding:10px 22px;font-size:0.85rem;">
-          <i class="fas fa-paper-plane"></i> Get In Touch
+        <a href="login.html" class="btn btn-primary" style="padding: 10px 22px; font-size: 0.85rem;">
+          <i class="fas fa-user-circle" style="margin-right:6px;"></i> Login / Register
         </a>
         <div class="hamburger" id="hamburger" onclick="toggleMobileNav()">
           <span></span><span></span><span></span>
@@ -280,71 +283,138 @@
   </nav>
 
   <div class="navbar-mobile" id="mobileNav">
-  <div class="lang-switcher" style="margin-bottom:16px;">
-    <button class="lang-btn active" onclick="switchLang('en')">EN</button>
-    <button class="lang-btn" onclick="switchLang('bn')">বাং</button>
-    <button class="lang-btn" onclick="switchLang('hi')">हिं</button>
-    <button class="lang-btn" onclick="switchLang('ar')">عر</button>
+    <div class="lang-switcher" style="margin-bottom:16px;">
+      <button class="lang-btn active" onclick="switchLang('en')">EN</button>
+      <button class="lang-btn" onclick="switchLang('bn')">বাং</button>
+    </div>
+    
+    <a href="index.html" onclick="toggleMobileNav()">Home</a>
+    
+    <div class="mobile-nav-header">About Us</div>
+    <a href="about.html" class="mobile-sub-link" onclick="toggleMobileNav()">Who We Are</a>
+    <a href="about.html#industries" class="mobile-sub-link" onclick="toggleMobileNav()">Industries & Sectors</a>
+
+    <div class="mobile-nav-header">Services</div>
+    <a href="visa-tracker.html" class="mobile-sub-link" onclick="toggleMobileNav()">Visa Tracker</a>
+    <a href="services.html#ami-probashi" class="mobile-sub-link" onclick="toggleMobileNav()">Ami Probashi Tools</a>
+    <a href="approved-centres.html" class="mobile-sub-link" onclick="toggleMobileNav()">Approved Centres</a>
+    <a href="https://yakeentravels.netlify.app/flights" target="_blank" class="mobile-sub-link" onclick="toggleMobileNav()">Buy Flight Tickets</a>
+
+    <a href="vacancies.html" onclick="toggleMobileNav()">Vacancies</a>
+    <a href="training.html" onclick="toggleMobileNav()">Training</a>
+
+    <div class="mobile-nav-header">Gallery</div>
+    <a href="gallery.html#photos" class="mobile-sub-link" onclick="toggleMobileNav(); switchMediaTab('photos')">Office Photos</a>
+    <a href="gallery.html#testimonials" class="mobile-sub-link" onclick="toggleMobileNav(); switchMediaTab('testimonials')">Testimonials</a>
+
+    <a href="contact.html" onclick="toggleMobileNav()">Contact</a>
+    <a href="login.html" class="btn btn-primary" style="margin-top:12px;" onclick="toggleMobileNav()">Login / Register</a>
   </div>
-  <a href="index.html"        onclick="toggleMobileNav()">Home</a>
-  <a href="about.html"        onclick="toggleMobileNav()">About Us</a>
-  <a href="services.html"     onclick="toggleMobileNav()">Services</a>
-  <a href="vacancies.html"    onclick="toggleMobileNav()">Vacancies</a>
-  <a href="visa-tracker.html" onclick="toggleMobileNav()">Visa Tracker</a>
-  <a href="approved-centres.html" onclick="toggleMobileNav()">Approved Centres</a>
-  <a href="gallery.html"      onclick="toggleMobileNav()">Gallery</a>
-  <a href="testimonials.html" onclick="toggleMobileNav()">Testimonials</a>
-  <a href="employer.html"     onclick="toggleMobileNav()">Employers</a>
-  <a href="faq.html"          onclick="toggleMobileNav()">FAQ</a>
-  <a href="contact.html"      onclick="toggleMobileNav()">Contact</a>
-  <a href="contact.html" class="btn btn-primary" onclick="toggleMobileNav()">Get In Touch</a>
-</div>
+
 
   <section class="page-hero">
     <div class="container">
       <div class="breadcrumb">
         <a href="index.html">Home</a>
         <span class="breadcrumb-sep">›</span>
-        <span>Gallery</span>
+        <span>Gallery & Stories</span>
       </div>
-      <span class="section-tag" style="background:rgba(201,160,48,0.2);color:var(--gold-light);">Our Photos</span>
+      <span class="section-tag" style="background:rgba(201,160,48,0.2);color:var(--gold-light);">Media Hub</span>
       <h1 class="section-title" style="color:var(--white);margin-top:12px;">
-        Our <span>Gallery</span>
+        Our Office & <span>Success Stories</span>
       </h1>
       <div class="gold-divider center"></div>
-      <p class="section-subtitle" style="color:rgba(255,255,255,0.7);margin:0 auto;max-width:560px;">
-        A glimpse into our office, our team, and the workers we proudly deploy
-        to build better lives around the world.
+      <p class="section-subtitle" style="color:rgba(255,255,255,0.7);margin:0 auto;max-width:580px;">
+        A glimpse into our professional environment and the authentic voices of real workers building better lives abroad through Yakeen International.
       </p>
     </div>
   </section>
 
 
-  <section class="section-padding">
+  <section class="section-padding" style="min-height: 60vh;">
     <div class="container">
 
-      <div style="text-align:center;margin-bottom:32px;" data-aos="fade-up">
-        <span id="photoCount" style="font-size:0.9rem;color:var(--mid-gray);">
-          Loading photos...
-        </span>
+      <div class="media-tabs-wrapper" data-aos="fade-up">
+        <button class="media-tab-btn active" id="btn-photos" onclick="switchMediaTab('photos')">
+          <i class="fas fa-camera"></i> Office Photos
+        </button>
+        <button class="media-tab-btn" id="btn-testimonials" onclick="switchMediaTab('testimonials')">
+          <i class="fas fa-video"></i> Video Stories
+        </button>
       </div>
 
-      <div class="gallery-masonry" id="galleryGrid">
-        <div class="gallery-skeleton" style="height:220px;"></div>
-        <div class="gallery-skeleton" style="height:300px;"></div>
-        <div class="gallery-skeleton" style="height:180px;"></div>
-        <div class="gallery-skeleton" style="height:260px;"></div>
-        <div class="gallery-skeleton" style="height:200px;"></div>
-        <div class="gallery-skeleton" style="height:340px;"></div>
-      </div>
-
-      <div id="galleryEmpty" style="display:none;text-align:center;padding:80px 20px;">
-        <div style="font-size:3rem;margin-bottom:16px;">🖼️</div>
-        <div style="font-size:1.1rem;font-weight:700;color:var(--navy-dark);margin-bottom:8px;">
-          No photos yet
+      <div id="photos-tab" class="media-tab-content" style="display:block;">
+        <div style="text-align:center;margin-bottom:32px;" data-aos="fade-up">
+          <span id="photoCount" style="font-size:0.9rem;color:var(--mid-gray);">
+            <i class="fas fa-spinner fa-spin" style="color:var(--gold);"></i> Loading photos...
+          </span>
         </div>
-        <div style="font-size:0.88rem;color:var(--mid-gray);">
-          Office photos will appear here once uploaded by our team.
+
+        <div class="gallery-masonry" id="galleryGrid">
+          <div class="media-skeleton" style="height:220px; break-inside: avoid; margin-bottom: 20px;"></div>
+          <div class="media-skeleton" style="height:300px; break-inside: avoid; margin-bottom: 20px;"></div>
+          <div class="media-skeleton" style="height:180px; break-inside: avoid; margin-bottom: 20px;"></div>
+        </div>
+
+        <div id="galleryEmpty" class="empty-state" style="display:none;">
+          <div style="font-size:3rem;margin-bottom:16px;">🖼️</div>
+          <div style="font-size:1.1rem;font-weight:700;color:var(--navy-dark);margin-bottom:8px;">No photos yet</div>
+          <div style="font-size:0.88rem;color:var(--mid-gray);">Office photos will appear here once uploaded by our team.</div>
+        </div>
+      </div>
+
+
+      <div id="testimonials-tab" class="media-tab-content">
+        
+        <div class="stats-banner" data-aos="fade-up">
+          <div class="stats-banner-item">
+            <div class="stats-banner-num">500+</div>
+            <div class="stats-banner-label">Workers Deployed</div>
+          </div>
+          <div class="stats-banner-item">
+            <div class="stats-banner-num">11</div>
+            <div class="stats-banner-label">Countries</div>
+          </div>
+          <div class="stats-banner-item">
+            <div class="stats-banner-num">98%</div>
+            <div class="stats-banner-label">Satisfaction Rate</div>
+          </div>
+          <div class="stats-banner-item">
+            <div class="stats-banner-num">5★</div>
+            <div class="stats-banner-label">Worker Rating</div>
+          </div>
+        </div>
+
+        <div style="text-align:center;margin-bottom:32px;">
+          <span id="videoCount" style="font-size:0.9rem;color:var(--mid-gray);">
+            <i class="fas fa-spinner fa-spin" style="color:var(--gold);"></i> Loading stories...
+          </span>
+        </div>
+
+        <div class="testimonials-grid" id="testimonialsGrid">
+          <div class="media-skeleton" style="aspect-ratio:16/9; border-radius:var(--radius-md);"></div>
+          <div class="media-skeleton" style="aspect-ratio:16/9; border-radius:var(--radius-md);"></div>
+          <div class="media-skeleton" style="aspect-ratio:16/9; border-radius:var(--radius-md);"></div>
+        </div>
+
+        <div style="margin-top: 80px; display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;" data-aos="fade-up">
+          <div>
+            <span class="section-tag">Why We Share These</span>
+            <h2 class="section-title" style="margin-top:12px;">Authentic Voices <span>Build Trust</span></h2>
+            <div class="gold-divider"></div>
+            <p style="font-size:0.95rem;color:var(--text-body);line-height:1.9;margin-bottom:20px;">
+              In the manpower industry, words are cheap. That's why we let our workers speak for themselves. These are real people, holding their visas, standing in their new country. No scripts. No paid reviews. Just truth.
+            </p>
+          </div>
+          <div style="background:linear-gradient(135deg,var(--navy-dark),#1a1a3e);border-radius:var(--radius-lg);padding:40px;text-align:center;position:relative;overflow:hidden;">
+            <div style="position:absolute;top:-40px;right:-40px;width:160px;height:160px;background:radial-gradient(circle,rgba(201,160,48,0.1) 0%,transparent 70%);"></div>
+            <div style="font-size:3rem;margin-bottom:16px;position:relative;z-index:1;">🎥</div>
+            <h3 style="color:var(--white);font-size:1.2rem;font-weight:700;margin-bottom:12px;position:relative;z-index:1;">Want to Share Your Story?</h3>
+            <p style="color:rgba(255,255,255,0.65);font-size:0.88rem;line-height:1.7;margin-bottom:24px;position:relative;z-index:1;">
+              Are you a Yakeen International worker currently abroad? We'd love to feature your success story.
+            </p>
+            <a href="contact.html" class="btn btn-primary" style="position:relative;z-index:1;"><i class="fas fa-video"></i> Submit Your Story</a>
+          </div>
         </div>
       </div>
 
@@ -353,49 +423,25 @@
 
 
   <div class="lightbox" id="lightbox">
-    <button class="lightbox-close" onclick="closeLightbox()">
-      <i class="fas fa-times"></i>
-    </button>
-    <button class="lightbox-nav lightbox-prev" onclick="navigateLightbox(-1)">
-      <i class="fas fa-chevron-left"></i>
-    </button>
-    <button class="lightbox-nav lightbox-next" onclick="navigateLightbox(1)">
-      <i class="fas fa-chevron-right"></i>
-    </button>
+    <button class="lightbox-close" onclick="closeLightbox()"><i class="fas fa-times"></i></button>
+    <button class="lightbox-nav lightbox-prev" onclick="navigateLightbox(-1)"><i class="fas fa-chevron-left"></i></button>
+    <button class="lightbox-nav lightbox-next" onclick="navigateLightbox(1)"><i class="fas fa-chevron-right"></i></button>
     <div class="lightbox-inner">
       <img id="lightboxImg" src="" alt="" />
       <div class="lightbox-caption" id="lightboxCaption"></div>
     </div>
-    <div class="lightbox-counter" id="lightboxCounter"></div>
   </div>
 
-
-  <section class="section-padding bg-off-white">
-    <div class="container">
-      <div style="text-align:center;max-width:600px;margin:0 auto;" data-aos="fade-up">
-        <span class="section-tag">See More</span>
-        <h2 class="section-title" style="margin-top:12px;">
-          Follow Us on <span>Social Media</span>
-        </h2>
-        <div class="gold-divider center"></div>
-        <p style="font-size:0.95rem;color:var(--text-body);line-height:1.8;margin-bottom:32px;">
-          Stay updated with our latest deployments, office news, and worker
-          success stories on our social media pages.
-        </p>
-        <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;">
-          <a href="#" class="btn btn-primary">
-            <i class="fab fa-facebook-f"></i> Facebook Page
-          </a>
-          <a href="#" class="btn btn-navy">
-            <i class="fab fa-youtube"></i> YouTube Channel
-          </a>
-          <a href="#" class="btn btn-outline">
-            <i class="fab fa-whatsapp"></i> WhatsApp Us
-          </a>
-        </div>
+  <div class="video-modal" id="videoModal">
+    <div class="video-modal-inner">
+      <button class="video-modal-close" onclick="closeVideoModal()"><i class="fas fa-times"></i></button>
+      <iframe id="videoModalFrame" src="" allowfullscreen></iframe>
+      <div class="video-modal-info">
+        <div class="video-modal-name" id="modalWorkerName"></div>
+        <div class="video-modal-meta" id="modalWorkerMeta"></div>
       </div>
     </div>
-  </section>
+  </div>
 
 
   <footer class="footer">
@@ -418,22 +464,18 @@
           <h4 class="footer-col-title">Quick Links</h4>
           <ul class="footer-links">
             <li><a href="about.html">About Us</a></li>
-            <li><a href="services.html">Our Services</a></li>
             <li><a href="vacancies.html">Current Vacancies</a></li>
-            <li><a href="visa-tracker.html">Visa Tracker</a></li>
-            <li><a href="gallery.html">Gallery</a></li>
-            <li><a href="testimonials.html">Testimonials</a></li>
+            <li><a href="training.html">Training Modules</a></li>
+            <li><a href="contact.html">Contact Us</a></li>
           </ul>
         </div>
         <div>
-          <h4 class="footer-col-title">Our Services</h4>
+          <h4 class="footer-col-title">Candidate Services</h4>
           <ul class="footer-links">
-            <li><a href="services.html">Construction & MEP</a></li>
-            <li><a href="services.html">Industrial & Manufacturing</a></li>
-            <li><a href="services.html">Hospitality & Facilities</a></li>
-            <li><a href="services.html">Transport & Logistics</a></li>
-            <li><a href="services.html">Agriculture</a></li>
-            <li><a href="employer.html">Employer Corner</a></li>
+            <li><a href="visa-tracker.html">Visa Tracker</a></li>
+            <li><a href="approved-centres.html">Approved Centres</a></li>
+            <li><a href="https://yakeentravels.netlify.app/flights" target="_blank">Book Flights</a></li>
+            <li><a href="services.html#ami-probashi">Ami Probashi Tools</a></li>
           </ul>
         </div>
         <div>
@@ -450,15 +492,11 @@
             <span>✉️</span>
             <span>info@yakeenintl.com</span>
           </div>
-          <div class="footer-contact-item">
-            <span>🕐</span>
-            <span>Sun – Thu: 9am – 6pm<br/>Fri – Sat: 10am – 2pm</span>
-          </div>
         </div>
       </div>
       <div class="footer-bottom">
         <div class="footer-bottom-text">
-          © 2025 <span>Yakeen International</span>. All rights reserved.
+          © 2025 <span>Yakeen International</span>. All rights reserved. Nurturing Global Talent.
         </div>
         <div class="sister-strip">
           <span>A sister concern of</span>
@@ -477,24 +515,23 @@
   <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
+  
   <script>
+    // Supabase Connection
     const SUPABASE_URL = 'https://wjhbqhrzwopnmizlumyg.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndqaGJxaHJ6d29wbm1pemx1bXlnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkxODQyMDksImV4cCI6MjA5NDc2MDIwOX0.nPWyaBwX3cnioOYcXkVNLR_31AUeDjevphrtH87srgk';
-
     const { createClient } = supabase;
     const db = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     window.getGallery = async function() {
-      const { data, error } = await db
-        .from('gallery')
-        .select('*')
-        .order('created_at', { ascending: false });
+      const { data, error } = await db.from('gallery').select('*').order('created_at', { ascending: false });
+      if (error) return [];
+      return data || [];
+    };
 
-      if (error) {
-        console.error("Database Error:", error.message);
-        return [];
-      }
+    window.getTestimonials = async function() {
+      const { data, error } = await db.from('testimonials').select('*').order('created_at', { ascending: false });
+      if (error) return [];
       return data || [];
     };
   </script>
@@ -523,82 +560,123 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    // GSAP hero entrance
     gsap.from('.page-hero .breadcrumb',       { opacity: 0, y: 20, duration: 0.6, delay: 0.2 });
     gsap.from('.page-hero .section-tag',      { opacity: 0, y: 20, duration: 0.6, delay: 0.35 });
     gsap.from('.page-hero .section-title',    { opacity: 0, y: 30, duration: 0.7, delay: 0.5 });
     gsap.from('.page-hero .gold-divider',     { opacity: 0, scaleX: 0, duration: 0.6, delay: 0.7, transformOrigin: 'center' });
     gsap.from('.page-hero .section-subtitle', { opacity: 0, y: 20, duration: 0.6, delay: 0.85 });
 
-    // ── Gallery state ──
-    let allPhotos      = [];
+    // ── TAB SWITCHING LOGIC ──
+    function switchMediaTab(tabId) {
+      // Hide all contents
+      document.querySelectorAll('.media-tab-content').forEach(el => el.style.display = 'none');
+      // Remove active from all buttons
+      document.querySelectorAll('.media-tab-btn').forEach(btn => btn.classList.remove('active'));
+      
+      // Show selected content and activate button
+      document.getElementById(tabId + '-tab').style.display = 'block';
+      document.getElementById('btn-' + tabId).classList.add('active');
+      
+      // Refresh AOS animations so elements animate in properly
+      setTimeout(() => AOS.refresh(), 50);
+    }
+
+    // Check URL Hash on Load to auto-open tabs
+    window.addEventListener('load', () => {
+      if (window.location.hash === '#testimonials') {
+        switchMediaTab('testimonials');
+      }
+    });
+
+    // ── DATA FETCHING LOGIC ──
+    let allPhotos = [];
     let currentLightboxIndex = 0;
 
-    // ── Load gallery from Supabase ──
-    async function loadGallery() {
-      try {
-        const data = await window.getGallery();
-        allPhotos  = data || [];
+    const countryFlags = {
+      'Saudi Arabia':'🇸🇦','UAE':'🇦🇪','Japan':'🇯🇵','Vietnam':'🇻🇳','Maldives':'🇲🇻',
+      'Malaysia':'🇲🇾','Portugal':'🇵🇹','Spain':'🇪🇸','Norway':'🇳🇴','Malta':'🇲🇹','Italy':'🇮🇹'
+    };
 
-        clearSkeletons();
-
-        if (allPhotos.length === 0) {
-          document.getElementById('galleryEmpty').style.display = 'block';
-          document.getElementById('photoCount').textContent = '0 photos';
-          return;
-        }
-
-        document.getElementById('photoCount').textContent =
-          `${allPhotos.length} photo${allPhotos.length !== 1 ? 's' : ''}`;
-
-        renderGallery(allPhotos);
-
-      } catch (err) {
-        console.error('loadGallery error:', err);
-        clearSkeletons();
-        document.getElementById('galleryGrid').innerHTML = `
-          <div style="text-align:center;padding:60px 20px;color:var(--mid-gray);">
-            <div style="font-size:2.5rem;margin-bottom:12px;">⚠️</div>
-            <div style="font-weight:600;color:var(--navy-dark);">Could not load gallery</div>
-            <div style="font-size:0.88rem;margin-top:6px;">Please try again later.</div>
-          </div>`;
-      }
+    function getYouTubeId(url) {
+      if (!url) return '';
+      const match = url.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/);
+      return match ? match[1] : '';
     }
 
-    function clearSkeletons() {
-      document.getElementById('galleryGrid').innerHTML = '';
+    function escHtml(str) {
+      if (!str) return '';
+      return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
     }
 
-    // ── Render gallery items ──
-    function renderGallery(photos) {
-      const grid = document.getElementById('galleryGrid');
-      grid.innerHTML = photos.map((photo, i) => `
-        <div
-          class="gallery-item"
-          onclick="openLightbox(${i})"
-          data-aos="fade-up"
-          data-aos-delay="${Math.min((i % 3) * 100, 200)}"
-        >
-          <img
-            src="${escHtml(photo.image_url)}"
-            alt="${escHtml(photo.caption || 'Yakeen International')}"
-            loading="lazy"
-            onerror="this.parentElement.style.display='none'"
-          />
-          <div class="gallery-item-overlay">
-            <div class="gallery-zoom-icon">
-              <i class="fas fa-expand-alt"></i>
+    async function loadData() {
+      // 1. Load Gallery
+      const photosData = await window.getGallery();
+      const gridPhoto = document.getElementById('galleryGrid');
+      
+      if (!photosData || photosData.length === 0) {
+        document.getElementById('photoCount').textContent = '0 photos';
+        gridPhoto.innerHTML = '';
+        document.getElementById('galleryEmpty').style.display = 'block';
+      } else {
+        allPhotos = photosData;
+        document.getElementById('photoCount').innerHTML = `${photosData.length} photo${photosData.length !== 1 ? 's' : ''}`;
+        gridPhoto.innerHTML = photosData.map((photo, i) => `
+          <div class="gallery-item" onclick="openLightbox(${i})" data-aos="fade-up" data-aos-delay="${Math.min((i % 3) * 100, 200)}">
+            <img src="${escHtml(photo.image_url)}" alt="${escHtml(photo.caption || 'Photo')}" loading="lazy" onerror="this.parentElement.style.display='none'" />
+            <div class="gallery-item-overlay">
+              <div class="gallery-zoom-icon"><i class="fas fa-expand-alt"></i></div>
+              ${photo.caption ? `<div class="gallery-caption">${escHtml(photo.caption)}</div>` : ''}
             </div>
-            ${photo.caption ? `
-            <div class="gallery-caption">${escHtml(photo.caption)}</div>` : ''}
           </div>
-        </div>
-      `).join('');
+        `).join('');
+      }
+
+      // 2. Load Testimonials
+      const testData = await window.getTestimonials();
+      const gridTest = document.getElementById('testimonialsGrid');
+
+      if (!testData || testData.length === 0) {
+        document.getElementById('videoCount').textContent = '0 stories';
+        gridTest.innerHTML = `
+          <div class="empty-state">
+            <div style="font-size:3rem;margin-bottom:16px;">🎥</div>
+            <div style="font-size:1.1rem;font-weight:700;color:var(--navy-dark);margin-bottom:8px;">No stories yet</div>
+          </div>`;
+      } else {
+        document.getElementById('videoCount').innerHTML = `${testData.length} worker stor${testData.length !== 1 ? 'ies' : 'y'}`;
+        gridTest.innerHTML = testData.map((t, i) => {
+          const initials = t.worker_name ? t.worker_name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2) : '?';
+          const thumb = getYouTubeId(t.youtube_url) ? `https://img.youtube.com/vi/${getYouTubeId(t.youtube_url)}/hqdefault.jpg` : '';
+          const embed = getYouTubeId(t.youtube_url) ? `https://www.youtube.com/embed/${getYouTubeId(t.youtube_url)}` : '';
+          
+          return `
+            <div class="testimonial-full-card" data-aos="fade-up" data-aos-delay="${Math.min((i % 3) * 100, 200)}">
+              <div class="t-thumb" onclick="openVideoModal('${embed}','${escHtml(t.worker_name)}','${escHtml(t.job_title)}','${escHtml(t.country)}')">
+                <img src="${thumb}" alt="${escHtml(t.worker_name)}" loading="lazy" />
+                <div class="t-play"><div class="t-play-btn">▶</div></div>
+                <div class="t-country-badge">${countryFlags[t.country] || '🌍'} ${escHtml(t.country)}</div>
+              </div>
+              <div class="t-body">
+                <div class="t-worker-row">
+                  <div class="t-avatar">${initials}</div>
+                  <div>
+                    <div class="t-worker-name">${escHtml(t.worker_name)}</div>
+                    <div class="t-worker-meta">${escHtml(t.job_title)}</div>
+                  </div>
+                </div>
+                <div class="t-divider"></div>
+                <button class="t-watch-btn" onclick="openVideoModal('${embed}','${escHtml(t.worker_name)}','${escHtml(t.job_title)}','${escHtml(t.country)}')">
+                  <i class="fas fa-play-circle"></i> Watch Story
+                </button>
+              </div>
+            </div>`;
+        }).join('');
+      }
 
       AOS.refresh();
     }
 
-    // ── Lightbox ──
+    // ── MODALS LOGIC ──
     function openLightbox(index) {
       currentLightboxIndex = index;
       updateLightbox();
@@ -612,58 +690,51 @@
     }
 
     function navigateLightbox(direction) {
-      currentLightboxIndex =
-        (currentLightboxIndex + direction + allPhotos.length) % allPhotos.length;
+      currentLightboxIndex = (currentLightboxIndex + direction + allPhotos.length) % allPhotos.length;
       updateLightbox();
     }
 
     function updateLightbox() {
       const photo = allPhotos[currentLightboxIndex];
-      const img   = document.getElementById('lightboxImg');
-
-      // Fade transition
+      const img = document.getElementById('lightboxImg');
       img.style.opacity = '0';
       setTimeout(() => {
-        img.src               = photo.image_url;
-        img.alt               = photo.caption || 'Yakeen International';
-        img.style.opacity     = '1';
-        img.style.transition  = 'opacity 0.3s ease';
+        img.src = photo.image_url;
+        img.style.opacity = '1';
+        img.style.transition = 'opacity 0.3s ease';
       }, 150);
-
-      document.getElementById('lightboxCaption').textContent =
-        photo.caption || '';
-      document.getElementById('lightboxCounter').textContent =
-        `${currentLightboxIndex + 1} / ${allPhotos.length}`;
+      document.getElementById('lightboxCaption').textContent = photo.caption || '';
     }
 
-    // ── Keyboard navigation ──
+    function openVideoModal(embedUrl, name, jobTitle, country) {
+      if (!embedUrl) return;
+      document.getElementById('videoModalFrame').src  = embedUrl + '?autoplay=1&rel=0';
+      document.getElementById('modalWorkerName').textContent = name || '';
+      document.getElementById('modalWorkerMeta').textContent = jobTitle && country ? `${jobTitle} · ${country}` : '';
+      document.getElementById('videoModal').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeVideoModal() {
+      document.getElementById('videoModal').classList.remove('open');
+      document.getElementById('videoModalFrame').src = '';
+      document.body.style.overflow = '';
+    }
+
+    // Close Modals on click outside or escape key
+    document.getElementById('lightbox').addEventListener('click', function(e) { if(e.target===this) closeLightbox(); });
+    document.getElementById('videoModal').addEventListener('click', function(e) { if(e.target===this) closeVideoModal(); });
     document.addEventListener('keydown', e => {
-      const lb = document.getElementById('lightbox');
-      if (!lb.classList.contains('open')) return;
-      if (e.key === 'Escape')      closeLightbox();
-      if (e.key === 'ArrowLeft')   navigateLightbox(-1);
-      if (e.key === 'ArrowRight')  navigateLightbox(1);
+      if (e.key === 'Escape') { closeLightbox(); closeVideoModal(); }
+      if (document.getElementById('lightbox').classList.contains('open')) {
+        if (e.key === 'ArrowLeft') navigateLightbox(-1);
+        if (e.key === 'ArrowRight') navigateLightbox(1);
+      }
     });
 
-    // ── Close on backdrop click ──
-    document.getElementById('lightbox').addEventListener('click', function (e) {
-      if (e.target === this) closeLightbox();
-    });
-
-    // ── Helpers ──
-    function escHtml(str) {
-      if (!str) return '';
-      return str
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;');
-    }
-
-    // ── Init ──
-    loadGallery();
+    // Run
+    loadData();
 
   </script>
-
 </body>
 </html>
